@@ -2206,6 +2206,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Interactive glass mouse tracking for v2
   if (document.body.getAttribute('data-ui') === 'v2') {
     setupInteractiveGlass();
+    initializeV2FontPicker();
+    enhanceV2Modals();
+    enhanceV2ListCards();
+    enhanceV2ReadingPaper();
   }
 
   // Prevent viewport zoom on double tap (iOS Safari)
@@ -2262,4 +2266,371 @@ function setupInteractiveGlass() {
   });
   
   console.log('🎨 Interactive glass effects initialized for', interactiveElements.length, 'elements');
+}
+
+// UI v2 Font Picker System
+const fontToPenMap = {
+  'pen-caveat': 'resources/pen/pen1.svg',
+  'pen-kalam': 'resources/pen/pen2.svg',
+  'pen-shadows': 'resources/pen/pen3.svg',
+  'pen-patrick': 'resources/pen/pen4.svg',
+  'pen-indie': 'resources/pen/pen5.svg'
+};
+
+function applyV2Font(fontClass) {
+  // Only apply if v2 is active
+  if (document.body.getAttribute('data-ui') !== 'v2') return;
+  
+  // Remove all font classes from body
+  Object.keys(fontToPenMap).forEach(font => {
+    document.body.classList.remove(font);
+  });
+  
+  // Add the selected font class
+  document.body.classList.add(fontClass);
+  
+  // Update aria-checked states and visual selection
+  const fontOptions = document.querySelectorAll('.font-option');
+  fontOptions.forEach(option => {
+    option.setAttribute('aria-checked', option.dataset.font === fontClass);
+    if (option.dataset.font === fontClass) {
+      option.classList.add('bg-blue-500/30', 'dark:bg-blue-400/30', 'border-blue-400/60', 'dark:border-blue-300/60');
+      option.classList.remove('border-white/20', 'dark:border-white/30');
+    } else {
+      option.classList.remove('bg-blue-500/30', 'dark:bg-blue-400/30', 'border-blue-400/60', 'dark:border-blue-300/60');
+      option.classList.add('border-white/20', 'dark:border-white/30');
+    }
+  });
+  
+  // Save to localStorage
+  localStorage.setItem('v2SelectedFont', fontClass);
+  console.log('🖋️ Font applied:', fontClass);
+}
+
+function initializeV2FontPicker() {
+  // Only initialize if v2 is active
+  if (document.body.getAttribute('data-ui') !== 'v2') return;
+  
+  const fontOptions = document.querySelectorAll('.font-option');
+  fontOptions.forEach(option => {
+    option.addEventListener('click', () => {
+      const fontClass = option.dataset.font;
+      applyV2Font(fontClass);
+    });
+  });
+  
+  // Apply saved font or default
+  const savedFont = localStorage.getItem('v2SelectedFont') || 'pen-kalam';
+  applyV2Font(savedFont);
+  
+  console.log('🖋️ v2 Font picker initialized');
+}
+
+// v2 Enhanced Modal Animations
+function enhanceV2Modals() {
+  // Only enhance if v2 is active
+  if (document.body.getAttribute('data-ui') !== 'v2') return;
+  
+  const modals = document.querySelectorAll('.modal');
+  
+  modals.forEach(modal => {
+    // Override existing modal show/hide with enhanced animations
+    const originalShow = modal.classList.add;
+    const originalHide = modal.classList.remove;
+    
+    // Enhanced show animation
+    const showModal = () => {
+      modal.classList.remove('hidden');
+      modal.classList.add('visible', 'v2-modal-enter');
+      
+      // Remove animation class after animation completes
+      setTimeout(() => {
+        modal.classList.remove('v2-modal-enter');
+      }, 500);
+    };
+    
+    // Enhanced hide animation
+    const hideModal = () => {
+      modal.classList.remove('visible', 'v2-modal-enter');
+      modal.classList.add('hidden');
+    };
+    
+    // Listen for visibility changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          const classList = modal.classList;
+          if (classList.contains('visible') && !classList.contains('v2-modal-enter')) {
+            // Modal was shown, add our enhanced animation
+            setTimeout(() => {
+              modal.classList.add('v2-modal-enter');
+              setTimeout(() => {
+                modal.classList.remove('v2-modal-enter');
+              }, 500);
+            }, 10);
+          }
+        }
+      });
+    });
+    
+    observer.observe(modal, { attributes: true, attributeFilter: ['class'] });
+  });
+  
+  // Add staggered animation to list items
+  const addStaggeredAnimation = () => {
+    const listCards = document.querySelectorAll('.list-card');
+    listCards.forEach((card, index) => {
+      card.style.animationDelay = `${index * 50}ms`;
+    });
+  };
+  
+  // Apply staggered animation when modals become visible
+  const modalObserver = new MutationObserver(() => {
+    setTimeout(addStaggeredAnimation, 100);
+  });
+  
+  modals.forEach(modal => {
+    modalObserver.observe(modal, { attributes: true, attributeFilter: ['class'] });
+  });
+  
+  console.log('🎭 v2 Modal animations enhanced');
+}
+
+// v2 Enhanced List Card System
+function enhanceV2ListCards() {
+  // Only enhance if v2 is active
+  if (document.body.getAttribute('data-ui') !== 'v2') return;
+  
+  // Apply organic rotation to existing and new cards
+  const applyOrganicRotation = () => {
+    const listCards = document.querySelectorAll('.list-card');
+    listCards.forEach((card, index) => {
+      // Generate consistent rotation based on content or index
+      const rotation = (Math.random() * 3 - 1.5); // -1.5 to 1.5 degrees
+      card.style.setProperty('--card-rotation', `rotate(${rotation}deg)`);
+      
+      // Set staggered animation delay
+      card.style.animationDelay = `${index * 80}ms`;
+    });
+  };
+  
+  // Enhanced delete button interactions
+  const enhanceDeleteButtons = () => {
+    const deleteButtons = document.querySelectorAll('.list-card .delete-btn');
+    deleteButtons.forEach(btn => {
+      // Add enhanced hover effects
+      btn.addEventListener('mouseenter', () => {
+        btn.style.transform = 'scale(1.1)';
+      });
+      
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'scale(1)';
+      });
+    });
+  };
+  
+  // Enhanced number badge interactions
+  const enhanceNumberBadges = () => {
+    const numberBadges = document.querySelectorAll('.list-number');
+    numberBadges.forEach(badge => {
+      // Add micro-interaction on parent hover
+      const parentCard = badge.closest('.list-card');
+      if (parentCard) {
+        parentCard.addEventListener('mouseenter', () => {
+          badge.style.transform = 'scale(1.05)';
+        });
+        
+        parentCard.addEventListener('mouseleave', () => {
+          badge.style.transform = 'scale(1)';
+        });
+      }
+    });
+  };
+  
+  // Enhanced card hover effects
+  const enhanceCardHovers = () => {
+    const listCards = document.querySelectorAll('.list-card');
+    listCards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        // Ensure hover state removes rotation for clean scale
+        const isDesktop = window.innerWidth >= 640;
+        const scale = isDesktop ? 1.05 : 1.03;
+        card.style.transform = `scale(${scale}) rotate(0deg)`;
+        
+        // Enhance content slide
+        const content = card.querySelector('.list-content p');
+        if (content) {
+          content.style.transform = 'translateX(2px)';
+        }
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        // Restore organic rotation
+        const rotation = card.style.getPropertyValue('--card-rotation') || 'rotate(0deg)';
+        card.style.transform = `scale(1) ${rotation}`;
+        
+        // Reset content position
+        const content = card.querySelector('.list-content p');
+        if (content) {
+          content.style.transform = 'translateX(0px)';
+        }
+      });
+    });
+  };
+  
+  // Observe for new cards being added
+  const observeNewCards = () => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === 1 && node.classList?.contains('list-card')) {
+            // Apply enhancements to new card
+            setTimeout(() => {
+              applyOrganicRotation();
+              enhanceDeleteButtons();
+              enhanceNumberBadges();
+              enhanceCardHovers();
+            }, 50);
+          }
+        });
+      });
+    });
+    
+    // Observe both letter and bottle containers
+    const containers = [
+      document.getElementById('past-letters-container'),
+      document.getElementById('past-bottles-container')
+    ].filter(Boolean);
+    
+    containers.forEach(container => {
+      observer.observe(container, { childList: true, subtree: true });
+    });
+  };
+  
+  // Initial enhancement
+  applyOrganicRotation();
+  enhanceDeleteButtons();
+  enhanceNumberBadges();
+  enhanceCardHovers();
+  observeNewCards();
+  
+  console.log('🎨 v2 List cards enhanced with organic rotation and micro-interactions');
+}
+
+// v2 Enhanced Reading Pane Paper Surface
+function enhanceV2ReadingPaper() {
+  // Only enhance if v2 is active
+  if (document.body.getAttribute('data-ui') !== 'v2') return;
+  
+  // Enhanced paper animation triggers
+  const triggerPaperAnimation = (paperElement) => {
+    if (!paperElement) return;
+    
+    // Add entry animation
+    paperElement.style.animation = 'v2PaperEnter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    
+    // Remove animation class after completion
+    setTimeout(() => {
+      paperElement.style.animation = '';
+    }, 600);
+  };
+  
+  // Enhanced paper hover effects
+  const addPaperInteractions = (paperElement) => {
+    if (!paperElement) return;
+    
+    paperElement.addEventListener('mouseenter', () => {
+      paperElement.style.transform = 'translateZ(0) translateY(-2px)';
+    });
+    
+    paperElement.addEventListener('mouseleave', () => {
+      paperElement.style.transform = 'translateZ(0) translateY(0px)';
+    });
+  };
+  
+  // Observe reading pane changes to trigger paper animations
+  const observeReadingPanes = () => {
+    const readingPanes = [
+      document.getElementById('letter-reading-pane'),
+      document.getElementById('bottle-reading-pane')
+    ].filter(Boolean);
+    
+    readingPanes.forEach(pane => {
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          mutation.addedNodes.forEach((node) => {
+            if (node.nodeType === 1 && node.classList?.contains('reading-paper')) {
+              // New paper element added
+              setTimeout(() => {
+                triggerPaperAnimation(node);
+                addPaperInteractions(node);
+              }, 50);
+            }
+          });
+        });
+      });
+      
+      observer.observe(pane, { childList: true, subtree: true });
+      
+      // Enhance existing paper elements
+      const existingPaper = pane.querySelector('.reading-paper');
+      if (existingPaper) {
+        addPaperInteractions(existingPaper);
+      }
+    });
+  };
+  
+  // Enhanced typography adjustments based on selected font
+  const adjustPaperTypography = () => {
+    const body = document.body;
+    const paperElements = document.querySelectorAll('.reading-paper');
+    
+    paperElements.forEach(paper => {
+      // Adjust line height based on selected handwriting font
+      if (body.classList.contains('pen-caveat')) {
+        paper.style.lineHeight = '1.8';
+        paper.style.letterSpacing = '0.02em';
+      } else if (body.classList.contains('pen-kalam')) {
+        paper.style.lineHeight = '1.75';
+        paper.style.letterSpacing = '0.01em';
+      } else if (body.classList.contains('pen-shadows')) {
+        paper.style.lineHeight = '1.85';
+        paper.style.letterSpacing = '0.015em';
+      } else if (body.classList.contains('pen-patrick')) {
+        paper.style.lineHeight = '1.7';
+        paper.style.letterSpacing = '0.005em';
+      } else if (body.classList.contains('pen-indie')) {
+        paper.style.lineHeight = '1.8';
+        paper.style.letterSpacing = '0.02em';
+      }
+    });
+  };
+  
+  // Enhanced paper texture randomization
+  const addPaperTextureVariation = () => {
+    const paperElements = document.querySelectorAll('.reading-paper');
+    
+    paperElements.forEach((paper, index) => {
+      // Add subtle texture variation
+      const variation = (index % 3) + 1;
+      paper.style.setProperty('--paper-texture-variation', variation);
+      
+      // Add subtle rotation for organic feel
+      const rotation = (Math.random() * 0.5 - 0.25); // -0.25 to 0.25 degrees
+      paper.style.setProperty('--paper-rotation', `${rotation}deg`);
+    });
+  };
+  
+  // Initialize paper enhancements
+  observeReadingPanes();
+  addPaperTextureVariation();
+  
+  // Listen for font changes to adjust typography
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('font-option')) {
+      setTimeout(adjustPaperTypography, 100);
+    }
+  });
+  
+  console.log('📄 v2 Reading paper surface enhanced with animations and interactions');
 }

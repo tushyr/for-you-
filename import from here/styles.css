@@ -82,8 +82,7 @@ body.pen-indie #bottle-reading-pane {
     z-index: 3;
 }
 
-    z-index: 4;
-}
+
 
 .content-wrapper {
     position: relative;
@@ -390,8 +389,6 @@ body.pen-indie #bottle-reading-pane {
 }
 
 
-    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.5);
-}
 
 /* Kitty Guide */
 #kitty-guide {
