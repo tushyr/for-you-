@@ -2140,8 +2140,26 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadBottles();
   checkUnreadBottles();
   setMinUnlockDate();
-  // Weather override via URL (?weather=Rain), localStorage, or default to live
+  
+  // UI Version 2 Toggle - Step 1 Foundation
   const params = new URLSearchParams(location.search);
+  const uiV2 = params.get('uiv2');
+  const storedUIVersion = localStorage.getItem('uiVersion');
+  
+  if (uiV2 === 'on') {
+    localStorage.setItem('uiVersion', 'v2');
+    document.body.setAttribute('data-ui', 'v2');
+    console.log('🎨 UI v2 enabled - Enhanced glass morphism active');
+  } else if (uiV2 === 'off') {
+    localStorage.removeItem('uiVersion');
+    document.body.removeAttribute('data-ui');
+    console.log('🎨 UI v1 active - Original styling');
+  } else if (storedUIVersion === 'v2') {
+    document.body.setAttribute('data-ui', 'v2');
+    console.log('🎨 UI v2 restored from localStorage');
+  }
+  
+  // Weather override via URL (?weather=Rain), localStorage, or default to live
   const urlOverride = params.get('weather');
   const storedOverride = localStorage.getItem('weatherOverride');
 
@@ -2184,6 +2202,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       applyWeatherOverride(target);
     }
   });
+  
+  // Interactive glass mouse tracking for v2
+  if (document.body.getAttribute('data-ui') === 'v2') {
+    setupInteractiveGlass();
+  }
 
   // Prevent viewport zoom on double tap (iOS Safari)
   let lastTouchEnd = 0;
@@ -2217,3 +2240,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     checkUnreadBottles();
   });
 });
+
+// UI v2 Interactive Glass Effects
+function setupInteractiveGlass() {
+  const interactiveElements = document.querySelectorAll('.interactive-glass');
+  
+  interactiveElements.forEach(element => {
+    element.addEventListener('mousemove', (e) => {
+      const rect = element.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      
+      element.style.setProperty('--x', `${x}%`);
+      element.style.setProperty('--y', `${y}%`);
+    });
+    
+    element.addEventListener('mouseleave', () => {
+      element.style.setProperty('--x', '50%');
+      element.style.setProperty('--y', '50%');
+    });
+  });
+  
+  console.log('🎨 Interactive glass effects initialized for', interactiveElements.length, 'elements');
+}
