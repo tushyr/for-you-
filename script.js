@@ -104,6 +104,19 @@ createNewLetterButton.addEventListener("click", () => {
   }, 200);
 });
 
+// Mobile Create New Letter Button
+const createNewLetterMobileButton = document.getElementById("create-new-letter-mobile");
+if (createNewLetterMobileButton) {
+  createNewLetterMobileButton.addEventListener("click", () => {
+    letterModal.classList.remove("visible");
+    setTimeout(() => {
+      letterModal.classList.add("hidden");
+      letterComposerModal.classList.remove("hidden");
+      setTimeout(() => letterComposerModal.classList.add("visible"), 10);
+    }, 200);
+  });
+}
+
 backToInboxButton.addEventListener("click", () => {
   letterComposerModal.classList.remove("visible");
   setTimeout(() => {
@@ -162,7 +175,7 @@ function renderLetters() {
   if (!pastLettersContainer) return;
   
   pastLettersContainer.innerHTML = "";
-  localLetters.forEach((letter) => {
+  localLetters.forEach((letter, index) => {
     const letterCard = document.createElement("div");
     letterCard.className =
       "list-card p-3 bg-white/30 dark:bg-black/20 rounded-lg cursor-pointer hover:bg-white/40 dark:hover:bg-black/30 transition-colors";
@@ -170,9 +183,17 @@ function renderLetters() {
     const date = new Date(letter.createdAt);
     const preview = letter.text.substring(0, 50) + (letter.text.length > 50 ? "..." : "");
     const fontClass = letter.font || 'font-letter';
+    const letterNumber = localLetters.length - index; // Reverse numbering (newest first)
     letterCard.innerHTML = `
-      <div class="text-xs text-gray-600 dark:text-gray-400 mb-1">${date.toLocaleDateString()}</div>
-      <div class="text-sm text-gray-800 dark:text-gray-100 ${fontClass}">${preview}</div>
+      <div class="flex items-start gap-3">
+        <div class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
+          ${letterNumber}
+        </div>
+        <div class="flex-grow min-w-0">
+          <div class="text-sm text-gray-800 dark:text-gray-100 ${fontClass} mb-1 font-medium">${preview}</div>
+          <div class="text-xs text-gray-600 dark:text-gray-400">${date.toLocaleDateString()}</div>
+        </div>
+      </div>
     `;
     pastLettersContainer.appendChild(letterCard);
   });
@@ -193,7 +214,13 @@ pastLettersContainer.addEventListener("click", (e) => {
     const letter = localLetters.find(
       (l) => l.id === Number(card.dataset.letterId),
     );
-    if (letter) displayLetter(letter);
+    if (letter) {
+      displayLetter(letter);
+      // Auto-hide sidebar on mobile after selecting a letter
+      if (window.innerWidth < 768 && letterSidebar) {
+        letterSidebar.classList.remove("sidebar-open");
+      }
+    }
   }
 });
 
@@ -203,9 +230,48 @@ function displayLetter(letter) {
   const date = new Date(letter.createdAt);
   const fontClass = letter.font || 'font-letter';
   letterReadingPane.innerHTML = `
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">${date.toLocaleDateString()} at ${date.toLocaleTimeString()}</div>
-    <div class="whitespace-pre-wrap ${fontClass}">${letter.text}</div>
+    <div class="absolute top-3 right-3 sm:top-4 sm:right-4 flex items-center gap-2 z-40">
+        <button
+            id="create-new-letter-dynamic"
+            class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
+        >
+            Create New
+        </button>
+        <button
+            id="close-letter-modal-dynamic"
+            class="close-btn ui-button rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-lg sm:text-xl font-semibold"
+        >
+            ×
+        </button>
+    </div>
+    <div class="p-4 pt-16">
+      <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">${date.toLocaleDateString()} at ${date.toLocaleTimeString()}</div>
+      <div class="whitespace-pre-wrap ${fontClass} text-lg leading-relaxed">${letter.text}</div>
+    </div>
   `;
+  
+  // Add event listeners to the dynamically created buttons
+  const createNewBtn = document.getElementById("create-new-letter-dynamic");
+  const closeBtn = document.getElementById("close-letter-modal-dynamic");
+  
+  if (createNewBtn) {
+    createNewBtn.addEventListener("click", () => {
+      letterModal.classList.remove("visible");
+      setTimeout(() => {
+        letterModal.classList.add("hidden");
+        letterComposerModal.classList.remove("hidden");
+        setTimeout(() => letterComposerModal.classList.add("visible"), 10);
+      }, 200);
+    });
+  }
+  
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      letterModal.classList.remove("visible");
+      setTimeout(() => letterModal.classList.add("hidden"), 400);
+    });
+  }
+  
   document
     .querySelectorAll("#past-letters-container .list-card")
     .forEach((c) => c.classList.remove("active"));
@@ -2032,16 +2098,16 @@ const letterSidebar = document.getElementById("letter-sidebar");
 const toggleBottleSidebar = document.getElementById("toggle-bottle-sidebar");
 const bottleSidebar = document.getElementById("bottle-sidebar");
 
-// Letter sidebar toggle
+// Letter sidebar toggle - mobile functionality
 if (toggleLetterSidebar && letterSidebar) {
   toggleLetterSidebar.addEventListener("click", () => {
-    letterSidebar.classList.toggle("-translate-x-full");
+    letterSidebar.classList.toggle("sidebar-open");
   });
 
   // Close sidebar when clicking outside on mobile
   letterModal.addEventListener("click", (e) => {
     if (window.innerWidth < 768 && !letterSidebar.contains(e.target) && !toggleLetterSidebar.contains(e.target)) {
-      letterSidebar.classList.add("-translate-x-full");
+      letterSidebar.classList.remove("sidebar-open");
     }
   });
 }
@@ -2062,7 +2128,8 @@ if (toggleBottleSidebar && bottleSidebar) {
 
 // Reset sidebar state when modals are opened/closed
 const resetSidebarState = () => {
-  if (letterSidebar) letterSidebar.classList.add("-translate-x-full");
+  // Reset both sidebars to closed state
+  if (letterSidebar) letterSidebar.classList.remove("sidebar-open");
   if (bottleSidebar) bottleSidebar.classList.add("-translate-x-full");
 };
 

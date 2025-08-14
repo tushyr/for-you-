@@ -150,7 +150,6 @@
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
                 >
                     <path
                         stroke-linecap="round"
@@ -332,38 +331,45 @@
         <!-- Letter Modal (Inbox View) -->
         <div
             id="letter-modal"
-            class="modal hidden fixed inset-0 flex items-center justify-center z-50 p-4"
+            class="modal hidden fixed inset-0 flex items-center justify-center z-50 p-2 sm:p-4"
         >
             <div
-                class="glass-ui rounded-xl sm:rounded-2xl shadow-2xl modal-content flex flex-col md:flex-row overflow-hidden w-full relative"
+                class="glass-ui rounded-xl sm:rounded-2xl shadow-2xl modal-content flex flex-col md:flex-row overflow-hidden w-full sm:max-w-4xl mx-auto relative"
             >
-                <!-- Mobile Toggle Button -->
-                <button
-                    id="toggle-letter-sidebar"
-                    class="md:hidden absolute top-3 left-3 z-50 ui-button rounded-full p-2.5"
-                >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
+                <!-- Mobile Header -->
+                <div class="md:hidden absolute top-0 left-0 right-0 z-50 flex items-center justify-between p-3 bg-white/10 backdrop-blur-lg border-b border-white/20">
+                    <button
+                        id="toggle-letter-sidebar"
+                        class="ui-button rounded-full p-2.5"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    
+                    <h3 class="text-lg font-handwriting text-gray-800 dark:text-gray-100">
+                        Letter Inbox
+                    </h3>
+                    
+                    <button
+                        id="create-new-letter-mobile"
+                        class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
+                    >
+                        Create New
+                    </button>
+                </div>
                 
                 <!-- Sidebar -->
                 <div
                     id="letter-sidebar"
-                    class="modal-sidebar flex flex-col border-b md:border-b-0 md:border-r border-white/20 absolute md:relative transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out"
+                    class="modal-sidebar flex flex-col border-b md:border-b-0 md:border-r border-white/20 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out"
                 >
-                    <div class="p-3 sm:p-4 border-b border-white/20 flex-shrink-0">
-                        <h3 class="text-lg sm:text-xl font-handwriting text-gray-800 dark:text-gray-100 mb-3">
+                    <div class="p-3 sm:p-4 border-b border-white/20 flex-shrink-0 md:block hidden">
+                        <h3 class="text-lg sm:text-xl font-handwriting text-gray-800 dark:text-gray-100">
                             Letter Inbox
                         </h3>
-                        <button
-                            id="create-new-letter"
-                            class="w-full px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
-                        >
-                            Create New
-                        </button>
                     </div>
-                    <div class="flex-grow overflow-y-auto p-3 sm:p-4 mobile-scroll">
+                    <div class="flex-grow overflow-y-auto p-3 sm:p-4 mobile-scroll pt-16 md:pt-3">
                         <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">
                             Past Letters
                         </h4>
@@ -375,24 +381,28 @@
                 </div>
                 <!-- Main Content -->
                 <div
-                    class="modal-main flex flex-col p-3 sm:p-6 relative flex-1 md:ml-0 transition-all duration-300"
+                    id="letter-reading-pane"
+                    class="modal-main flex-grow overflow-y-auto font-letter text-base sm:text-lg md:text-xl text-gray-800 dark:text-gray-100 leading-relaxed mobile-scroll"
                 >
-                    <button
-                        id="close-letter-modal"
-                        class="close-btn absolute top-3 right-3 sm:top-4 sm:right-4 ui-button rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-lg sm:text-xl font-semibold z-30"
-                    >
-                        ×
-                    </button>
-                    <div
-                        id="letter-reading-pane"
-                        class="flex-grow overflow-y-auto font-letter text-base sm:text-lg md:text-xl text-gray-800 dark:text-gray-100 leading-relaxed mobile-scroll mt-12 md:mt-0 px-2 sm:px-0"
-                    >
-                        <div class="text-center text-gray-500 dark:text-gray-400 mt-20">
-                            <svg class="w-24 h-24 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                            </svg>
-                            <p class="text-lg">Select a letter to read</p>
-                        </div>
+                    <div class="absolute top-3 right-3 sm:top-4 sm:right-4 flex items-center gap-2 z-40">
+                        <button
+                            id="create-new-letter"
+                            class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
+                        >
+                            Create New
+                        </button>
+                        <button
+                            id="close-letter-modal"
+                            class="close-btn ui-button rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-lg sm:text-xl font-semibold"
+                        >
+                            ×
+                        </button>
+                    </div>
+                    <div class="text-center text-gray-500 dark:text-gray-400 mt-20">
+                        <svg class="w-24 h-24 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        <p class="text-lg">Select a letter to read</p>
                     </div>
                 </div>
             </div>
@@ -404,71 +414,57 @@
             class="modal hidden fixed inset-0 flex items-center justify-center z-50 p-2 sm:p-4"
         >
             <div
-                class="glass-ui rounded-2xl shadow-2xl modal-content w-full max-w-2xl overflow-hidden"
+                class="glass-ui rounded-lg shadow-lg modal-content w-full max-w-xs mx-auto overflow-hidden"
             >
-                <div class="p-4 border-b border-white/20 flex justify-between items-center">
+                <div class="p-2 border-b border-white/20 flex justify-between items-center">
                     <button
                         id="back-to-inbox"
-                        class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 text-sm"
+                        class="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 text-xs"
                     >
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
                         Back to Inbox
                     </button>
                     <button
                         id="close-composer-modal"
-                        class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-xl"
+                        class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-lg"
                     >
                         &times;
                     </button>
                 </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-handwriting text-gray-800 dark:text-gray-100 flex-grow text-center">
+                <div class="p-2.5">
+                    <h3 class="text-sm font-handwriting text-gray-800 dark:text-gray-100 text-center mb-2">
                         Write a New Letter
                     </h3>
-                    <button
-                        id="close-composer-modal"
-                        class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-2xl"
-                    >
-                        &times;
-                    </button>
-                </div>
-                <div class="p-6">
-                    <!-- Toolbar with decorative elements -->
-                    <div class="flex justify-center mb-4 space-x-4">
-                        <span class="text-2xl opacity-60">🌿</span>
-                        <span class="text-2xl opacity-60">✨</span>
-                        <span class="text-2xl opacity-60">🖋️</span>
-                        <span class="text-2xl opacity-60">🌸</span>
-                        <span class="text-2xl opacity-60">💫</span>
-                    </div>
                     
-                    <!-- Font Selector -->
-                    <div class="mb-4">
-                        <select
-                            id="letter-font-selector"
-                            class="w-full p-2 border rounded-lg bg-white/20 dark:bg-black/20 border-white/30 dark:border-white/10 text-gray-800 dark:text-gray-100 text-sm"
-                        >
-                            <option value="font-letter" style="font-family: 'Caveat', cursive;">Caveat (Default)</option>
-                            <option value="font-letter-dancing" style="font-family: 'Dancing Script', cursive;">Dancing Script</option>
-                            <option value="font-letter-kalam" style="font-family: 'Kalam', cursive;">Kalam</option>
-                            <option value="font-letter-indie" style="font-family: 'Indie Flower', cursive;">Indie Flower</option>
-                            <option value="font-letter-amatic" style="font-family: 'Amatic SC', cursive;">Amatic SC</option>
-                            <option value="font-letter-shadows" style="font-family: 'Shadows Into Light', cursive;">Shadows Into Light</option>
-                            <option value="font-letter-marker" style="font-family: 'Permanent Marker', cursive;">Permanent Marker</option>
-                            <option value="font-letter-satisfy" style="font-family: 'Satisfy', cursive;">Satisfy</option>
-                        </select>
+                    <!-- Font Picker Icons -->
+                    <div class="flex justify-center mb-2 space-x-1.5">
+                        <button class="font-picker-btn w-5 h-5 flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity" data-font="pen-caveat">
+                            <img src="resources/fontpicker/pen1.svg" alt="Caveat" class="w-3.5 h-3.5">
+                        </button>
+                        <button class="font-picker-btn w-5 h-5 flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity" data-font="pen-kalam">
+                            <img src="resources/fontpicker/pen2.svg" alt="Kalam" class="w-3.5 h-3.5">
+                        </button>
+                        <button class="font-picker-btn w-5 h-5 flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity" data-font="pen-shadows">
+                            <img src="resources/fontpicker/pen3.svg" alt="Shadows" class="w-3.5 h-3.5">
+                        </button>
+                        <button class="font-picker-btn w-5 h-5 flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity" data-font="pen-patrick">
+                            <img src="resources/fontpicker/pen4.svg" alt="Patrick" class="w-3.5 h-3.5">
+                        </button>
+                        <button class="font-picker-btn w-5 h-5 flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity" data-font="pen-indie">
+                            <img src="resources/fontpicker/pen5.svg" alt="Indie" class="w-3.5 h-3.5">
+                        </button>
                     </div>
                     
                     <textarea
                         id="letter-textarea"
-                        class="w-full h-64 p-4 border rounded-lg bg-white/20 dark:bg-black/20 border-white/30 dark:border-white/10 text-gray-800 dark:text-gray-100 font-letter text-lg placeholder-gray-600 dark:placeholder-gray-400 resize-none"
+                        class="w-full h-24 p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white/80 dark:bg-black/20 text-gray-800 dark:text-gray-100 font-letter text-xs placeholder-gray-500 dark:placeholder-gray-400 resize-none focus:border-blue-400 focus:outline-none"
                         placeholder="Write your thoughts..."
                     ></textarea>
                     <button
                         id="save-letter-button"
-                        class="w-full mt-4 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-base font-medium"
+                        class="w-full mt-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors text-xs font-medium"
                     >
                         Save Letter
                     </button>

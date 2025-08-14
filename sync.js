@@ -378,12 +378,21 @@ class SyncManager {
       const params = new URLSearchParams({ since: String(effectiveSince), limit: String(LIMIT) });
       if (pageCursor) params.set('pageCursor', pageCursor);
       const url = `${baseUrl}?${params.toString()}`;
+      console.log('[sync] Pulling from URL:', url);
+
 
       const response = await fetch(url, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
       });
       if (!response.ok) {
+        let errorText = '';
+        try {
+          errorText = await response.text();
+        } catch (e) {
+          errorText = '[could not read error body]';
+        }
+        console.error('[sync] Pull failed:', response.status, errorText);
         throw new Error(`Pull failed: ${response.status}`);
       }
 
