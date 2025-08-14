@@ -258,7 +258,7 @@
         </div>
 
         <div class="content-wrapper">
-            <div class="w-full max-w-sm sm:max-w-lg text-center relative">
+            <div class="w-full max-w-xs sm:max-w-sm text-center relative">
                 <button
                     id="prev-memory"
                     class="memory-arrow text-white/70 hover:text-white"
@@ -296,35 +296,33 @@
                     </svg>
                 </button>
 
-                <div class="glass-ui rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 interactive-glass shadow-2xl">
+                <div class="glass-ui rounded-xl sm:rounded-2xl px-3 sm:px-4 py-3 sm:py-4 interactive-glass shadow-lg max-w-xs sm:max-w-sm mx-auto">
                     <h1
-                        class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-gray-900 dark:text-gray-100 font-handwriting mb-6 sm:mb-8 md:mb-10 text-center"
+                        class="text-xl sm:text-2xl text-gray-900 dark:text-gray-100 font-handwriting mb-3 sm:mb-4 text-center"
                     >
                         For Jane Doe &lt;3
                     </h1>
                     <div
                         id="gif-container"
-                        class="w-full max-w-[240px] sm:max-w-[280px] md:max-w-sm lg:max-w-md mx-auto my-6 sm:my-8 md:my-10"
+                        class="w-full mx-auto mb-3 sm:mb-4 bg-transparent rounded-lg flex items-center justify-center"
                     >
-                        <div class="glass-ui rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
-                            <img
-                                id="changing-gif"
-                                src=""
-                                alt="A special memory"
-                                class="w-full h-auto rounded-lg object-contain min-h-[140px] sm:min-h-[160px] md:min-h-[180px] max-h-[180px] sm:max-h-[200px] md:max-h-[220px]"
-                            />
-                        </div>
+                        <img
+                            id="changing-gif"
+                            src=""
+                            alt="A special memory"
+                            class="w-full h-auto rounded-lg object-contain max-h-[180px] sm:max-h-[200px]"
+                        />
                     </div>
-                    <div id="text-container" class="px-2 sm:px-4 md:px-6 mt-6 sm:mt-8 md:mt-10">
+                    <div id="text-container" class="mb-3 sm:mb-4">
                         <p
                             id="changing-text"
-                            class="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-gray-800 dark:text-gray-200 leading-relaxed text-center mb-3 sm:mb-4 md:mb-6"
+                            class="text-sm sm:text-base text-gray-800 dark:text-gray-200 leading-relaxed text-center px-1"
                         ></p>
                     </div>
-                    <div class="mt-3 sm:mt-4 md:mt-6 space-y-2 sm:space-y-3 pb-3 sm:pb-4 md:pb-6">
+                    <div class="text-center">
                         <p
                             id="timer"
-                            class="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400 text-center"
+                            class="text-xs sm:text-sm text-gray-600 dark:text-gray-400"
                         ></p>
                     </div>
                 </div>

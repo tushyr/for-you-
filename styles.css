@@ -14,7 +14,7 @@ body.dark {
 
 body.light,
 body:not(.dark) {
-    background: linear-gradient(135deg, #bfdbfe 0%, #a5c9ea 100%) !important;
+    background: linear-gradient(135deg, #87ceeb 0%, #87ceeb 100%) !important;
 }
 
 /* Weather effects overlay - subtle atmospheric effects without changing base colors */
@@ -107,38 +107,44 @@ body.dark::before {
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
-    padding: 0.5rem;
-    background-color: rgba(0, 0, 0, 0.3);
+    padding: 0.4rem;
+    background-color: rgba(0, 0, 0, 0.1);
     border-radius: 9999px;
     transition: all 0.2s ease-in-out;
 }
 
 .memory-arrow:hover {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 #prev-memory {
-    left: -2rem;
+    left: -1.5rem;
 }
 
 #next-memory {
-    right: -2rem;
+    right: -1.5rem;
 }
 
 @media (max-width: 640px) {
     .memory-arrow {
-        padding: 0.25rem;
+        padding: 0.3rem;
     }
     #prev-memory {
-        left: -1rem;
+        left: -0.8rem;
     }
     #next-memory {
-        right: -1rem;
+        right: -0.8rem;
     }
 }
 
 .font-handwriting {
     font-family: "Pacifico", cursive;
+}
+
+/* Jane Doe heading size */
+.interactive-glass > h1 {
+    font-size: 2.6rem !important;
+    line-height: 1.15;
 }
 
 #animated-bg,
@@ -177,35 +183,44 @@ body.dark::before {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    padding: 1rem;
+    padding: 0.5rem;
     background-color: transparent;
 }
 
 @media (min-width: 640px) {
     .content-wrapper {
-        padding: 2rem;
+        padding: 1rem;
+    }
+}
+
+/* Responsive overrides for spacing utilities */
+@media (min-width: 640px) {
+    .sm\:py-3 {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0 !important;
+    }
+    .sm\:px-4 {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
     }
 }
 
 #text-container {
-    min-height: 3rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 0.5rem;
 }
 
 #gif-container {
-    height: 12rem;
     max-width: 100%;
 }
 
+#timer {
+    white-space: nowrap;
+}
+
 @media (min-width: 640px) {
-    #gif-container {
-        height: 20rem;
-    }
     #text-container {
-        min-height: 4rem;
         padding: 0;
     }
 }
@@ -230,20 +245,20 @@ body.dark::before {
     transform: scale(1);
 }
 
-/* Enhanced Glassmorphism Effect - Next Level */
+/* Enhanced Glassmorphism Effect - Memory 10 Match */
 .glass-ui {
     background: linear-gradient(
         135deg,
-        rgba(255, 255, 255, 0.15) 0%,
-        rgba(255, 255, 255, 0.08) 100%
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.1) 100%
     );
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     box-shadow: 
         0 8px 32px 0 rgba(31, 38, 135, 0.15),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-        0 0 80px rgba(255, 255, 255, 0.02);
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+        0 0 60px rgba(255, 255, 255, 0.03);
     position: relative;
 }
 
@@ -272,14 +287,14 @@ body.dark::before {
 .dark .glass-ui {
     background: linear-gradient(
         135deg,
-        rgba(255, 255, 255, 0.06) 0%,
-        rgba(255, 255, 255, 0.02) 100%
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.04) 100%
     );
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 
-        0 8px 32px 0 rgba(0, 0, 0, 0.37),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.05),
-        0 0 80px rgba(255, 255, 255, 0.01);
+        0 8px 32px 0 rgba(0, 0, 0, 0.35),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 0 60px rgba(255, 255, 255, 0.02);
 }
 
 .dark .glass-ui::before {
@@ -864,11 +879,7 @@ input[type="date"] {
         max-width: calc(100vw - 2rem);
     }
     
-    /* Memory container mobile sizing */
-    #gif-container {
-        width: 100%;
-        max-width: 280px;
-    }
+    /* Memory container mobile sizing - removed fixed sizing for better responsiveness */
     
     /* Weather overlays mobile adjustments */
     #clouds-overlay {
@@ -1726,14 +1737,7 @@ body {
 }
 
 @media (min-width: 640px) {
-    [data-ui="v2"] #gif-container {
-        height: 20rem !important;
-    }
-    
-    [data-ui="v2"] #text-container {
-        min-height: 4rem !important;
-        padding: 0 !important;
-    }
+
 }
 
 /* v2 Enhanced Modal Responsive Adjustments */
