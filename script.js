@@ -1248,12 +1248,53 @@ function updateTimer() {
   timerElement.innerText = `Missing you for: ${days} days, ${hours} hours, ${minutes} minutes, and ${seconds} seconds.`;
 }
 
+// --- Mobile Sidebar Toggle Logic ---
+const toggleLetterSidebar = document.getElementById("toggle-letter-sidebar");
+const letterSidebar = document.getElementById("letter-sidebar");
+const toggleBottleSidebar = document.getElementById("toggle-bottle-sidebar");
+const bottleSidebar = document.getElementById("bottle-sidebar");
+
+// Letter sidebar toggle
+if (toggleLetterSidebar && letterSidebar) {
+  toggleLetterSidebar.addEventListener("click", () => {
+    letterSidebar.classList.toggle("-translate-x-full");
+  });
+
+  // Close sidebar when clicking outside on mobile
+  letterModal.addEventListener("click", (e) => {
+    if (window.innerWidth < 768 && !letterSidebar.contains(e.target) && !toggleLetterSidebar.contains(e.target)) {
+      letterSidebar.classList.add("-translate-x-full");
+    }
+  });
+}
+
+// Bottle sidebar toggle
+if (toggleBottleSidebar && bottleSidebar) {
+  toggleBottleSidebar.addEventListener("click", () => {
+    bottleSidebar.classList.toggle("-translate-x-full");
+  });
+
+  // Close sidebar when clicking outside on mobile
+  bottleModal.addEventListener("click", (e) => {
+    if (window.innerWidth < 768 && !bottleSidebar.contains(e.target) && !toggleBottleSidebar.contains(e.target)) {
+      bottleSidebar.classList.add("-translate-x-full");
+    }
+  });
+}
+
+// Reset sidebar state when modals are opened/closed
+const resetSidebarState = () => {
+  if (letterSidebar) letterSidebar.classList.add("-translate-x-full");
+  if (bottleSidebar) bottleSidebar.classList.add("-translate-x-full");
+};
+
 // --- Mobile Modal Handling ---
 function closeModalOnOutsideClick(modal) {
   modal.addEventListener("click", (e) => {
     if (e.target === modal) {
       modal.classList.remove("visible");
       setTimeout(() => modal.classList.add("hidden"), 300);
+      resetSidebarState(); // Reset sidebar when modal closes
     }
   });
 }
@@ -1280,18 +1321,23 @@ function toggleBodyScroll(shouldPrevent) {
 
 openLetterModalButton.addEventListener("click", () => {
   toggleBodyScroll(true);
+  resetSidebarState(); // Reset sidebar state when opening modal
 });
 closeLetterModalButton.addEventListener("click", () => {
   toggleBodyScroll(false);
+  resetSidebarState();
 });
 closeComposerModalButton.addEventListener("click", () => {
   toggleBodyScroll(false);
+  resetSidebarState();
 });
 openBottleModalButton.addEventListener("click", () => {
   toggleBodyScroll(true);
+  resetSidebarState(); // Reset sidebar state when opening modal
 });
 closeBottleModalButton.addEventListener("click", () => {
   toggleBodyScroll(false);
+  resetSidebarState();
 });
 
 // --- Initial Load ---
