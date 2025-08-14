@@ -41,23 +41,36 @@ const letterNotificationDot = document.getElementById(
 const letterReadingPane = document.getElementById("letter-reading-pane");
 const letterIcon = document.getElementById("weather-animation");
 
+// Font picker buttons for new design
+const fontPickerButtons = document.querySelectorAll('.font-picker-btn');
+
 let localLetters = [];
-let selectedLetterFont = localStorage.getItem('selectedLetterFont') || 'font-letter';
+let selectedLetterFont = localStorage.getItem('selectedLetterFont') || 'pen-caveat';
+let currentLetterId = null;
 
-// Apply saved font preference
-if (letterFontSelector) {
-  letterFontSelector.value = selectedLetterFont;
-  letterTextarea.className = letterTextarea.className.replace(/font-letter[\w-]*/g, '') + ' ' + selectedLetterFont;
+// Apply saved font preference to textarea
+if (letterTextarea) {
+  letterTextarea.className = letterTextarea.className.replace(/font-[\w-]*/g, '') + ' font-' + selectedLetterFont;
 }
 
-// Font selector change handler
-if (letterFontSelector) {
-  letterFontSelector.addEventListener('change', (e) => {
-    selectedLetterFont = e.target.value;
+// Font picker button handlers for new design
+fontPickerButtons.forEach(btn => {
+  // Set initial active state
+  if (btn.dataset.font === selectedLetterFont) {
+    btn.classList.add('active');
+  }
+  
+  btn.addEventListener('click', () => {
+    // Remove active from all buttons
+    fontPickerButtons.forEach(b => b.classList.remove('active'));
+    // Add active to clicked button
+    btn.classList.add('active');
+    
+    selectedLetterFont = btn.dataset.font;
     localStorage.setItem('selectedLetterFont', selectedLetterFont);
-    letterTextarea.className = letterTextarea.className.replace(/font-letter[\w-]*/g, '') + ' ' + selectedLetterFont;
+    letterTextarea.className = letterTextarea.className.replace(/font-[\w-]*/g, '') + ' font-' + selectedLetterFont;
   });
-}
+});
 
 // Load letters from sync API
 async function loadLetters() {
@@ -74,12 +87,12 @@ async function loadLetters() {
 
 openLetterModalButton.addEventListener("click", () => {
   letterModal.classList.remove("hidden");
-  setTimeout(() => letterModal.classList.add("visible"), 10);
   localStorage.setItem(
     CONFIG.storage.lastOpenedLetters,
     new Date().toISOString(),
   );
   checkUnreadLetters();
+  loadLetters();
 
   // Add animation interaction feedback
   if (letterIcon) {
@@ -91,12 +104,52 @@ openLetterModalButton.addEventListener("click", () => {
 });
 
 closeLetterModalButton.addEventListener("click", () => {
-  letterModal.classList.remove("visible");
-  setTimeout(() => letterModal.classList.add("hidden"), 400);
+  letterModal.classList.add("hidden");
 });
 
 createNewLetterButton.addEventListener("click", () => {
-  letterModal.classList.remove("visible");
+  letterComposerModal.classList.remove("hidden");
+  letterTextarea.value = "";
+  letterTextarea.focus();
+});
+
+backToInboxButton.addEventListener("click", () => {
+  letterComposerModal.classList.add("hidden");
+  letterModal.classList.remove("hidden");
+});
+
+closeComposerModalButton.addEventListener("click", () => {
+  letterComposerModal.classList.add("hidden");
+});
+
+saveLetterButton.addEventListener("click", async () => {
+  const content = letterTextarea.value.trim();
+  if (content) {
+    const newLetter = {
+      id: Date.now(),
+      content: content,
+      font: selectedLetterFont,
+      date: new Date().toISOString(),
+    };
+    
+    localLetters.unshift(newLetter);
+    
+    try {
+      await window.SyncAPI.saveLetters(localLetters);
+    } catch (error) {
+      console.error('Failed to save letter:', error);
+      localStorage.setItem(CONFIG.storage.letters, JSON.stringify(localLetters));
+    }
+    
+    letterTextarea.value = "";
+    letterComposerModal.classList.add("hidden");
+    letterModal.classList.remove("hidden");
+    renderLetters();
+  }
+});
+
+// Original continuation for backward compatibility
+createNewLetterButton.addEventListener("click", () => {
   setTimeout(() => {
     letterModal.classList.add("hidden");
     letterComposerModal.classList.remove("hidden");
@@ -176,109 +229,57 @@ function renderLetters() {
   
   pastLettersContainer.innerHTML = "";
   localLetters.forEach((letter, index) => {
-    const letterCard = document.createElement("div");
-    letterCard.className =
-      "list-card p-3 bg-white/30 dark:bg-black/20 rounded-lg cursor-pointer hover:bg-white/40 dark:hover:bg-black/30 transition-colors";
-    letterCard.dataset.letterId = letter.id;
-    const date = new Date(letter.createdAt);
-    const preview = letter.text.substring(0, 50) + (letter.text.length > 50 ? "..." : "");
-    const fontClass = letter.font || 'font-letter';
-    const letterNumber = localLetters.length - index; // Reverse numbering (newest first)
-    letterCard.innerHTML = `
-      <div class="flex items-start gap-3">
-        <div class="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
-          ${letterNumber}
-        </div>
-        <div class="flex-grow min-w-0">
-          <div class="text-sm text-gray-800 dark:text-gray-100 ${fontClass} mb-1 font-medium">${preview}</div>
-          <div class="text-xs text-gray-600 dark:text-gray-400">${date.toLocaleDateString()}</div>
-        </div>
-      </div>
+    const letterItem = document.createElement("div");
+    letterItem.className = "letter-item";
+    letterItem.dataset.letterId = letter.id;
+    
+    const date = new Date(letter.date || letter.createdAt);
+    const content = letter.content || letter.text || "";
+    const preview = content.substring(0, 80) + (content.length > 80 ? "..." : "");
+    
+    letterItem.innerHTML = `
+      <div class="letter-item-date">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+      <div class="letter-item-preview">${preview}</div>
     `;
-    pastLettersContainer.appendChild(letterCard);
+    
+    letterItem.addEventListener('click', () => {
+      // Remove active class from all items
+      document.querySelectorAll('.letter-item').forEach(item => item.classList.remove('active'));
+      // Add active class to clicked item
+      letterItem.classList.add('active');
+      // Display the letter
+      displayLetter(letter);
+    });
+    
+    pastLettersContainer.appendChild(letterItem);
   });
   
   if (localLetters.length === 0) {
     pastLettersContainer.innerHTML = `
-      <div class="text-center text-gray-500 dark:text-gray-400 py-8">
-        <p class="text-sm">No letters yet</p>
-        <p class="text-xs mt-2">Create your first letter to get started</p>
+      <div style="text-align: center; padding: 32px 16px; color: rgba(255, 255, 255, 0.4);">
+        <p style="font-size: 14px; margin-bottom: 8px;">No letters yet</p>
+        <p style="font-size: 12px;">Click "Create New" to write your first letter</p>
       </div>
     `;
   }
 }
 
-pastLettersContainer.addEventListener("click", (e) => {
-  const card = e.target.closest(".list-card");
-  if (card) {
-    const letter = localLetters.find(
-      (l) => l.id === Number(card.dataset.letterId),
-    );
-    if (letter) {
-      displayLetter(letter);
-      // Auto-hide sidebar on mobile after selecting a letter
-      if (window.innerWidth < 768 && letterSidebar) {
-        letterSidebar.classList.remove("sidebar-open");
-      }
-    }
-  }
-});
-
+// Display letter function for the new design
 function displayLetter(letter) {
   if (!letterReadingPane) return;
   
-  const date = new Date(letter.createdAt);
-  const fontClass = letter.font || 'font-letter';
+  const date = new Date(letter.date || letter.createdAt);
+  const content = letter.content || letter.text || "";
+  const fontClass = 'font-' + (letter.font || 'pen-caveat');
+  
   letterReadingPane.innerHTML = `
-    <div class="absolute top-3 right-3 sm:top-4 sm:right-4 flex items-center gap-2 z-40">
-        <button
-            id="create-new-letter-dynamic"
-            class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
-        >
-            Create New
-        </button>
-        <button
-            id="close-letter-modal-dynamic"
-            class="close-btn ui-button rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-lg sm:text-xl font-semibold"
-        >
-            ×
-        </button>
-    </div>
-    <div class="p-4 pt-16">
-      <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">${date.toLocaleDateString()} at ${date.toLocaleTimeString()}</div>
-      <div class="whitespace-pre-wrap ${fontClass} text-lg leading-relaxed">${letter.text}</div>
+    <div class="letter-content">
+      <div class="letter-content-date">${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+      <div class="letter-content-body ${fontClass}">${content}</div>
     </div>
   `;
   
-  // Add event listeners to the dynamically created buttons
-  const createNewBtn = document.getElementById("create-new-letter-dynamic");
-  const closeBtn = document.getElementById("close-letter-modal-dynamic");
-  
-  if (createNewBtn) {
-    createNewBtn.addEventListener("click", () => {
-      letterModal.classList.remove("visible");
-      setTimeout(() => {
-        letterModal.classList.add("hidden");
-        letterComposerModal.classList.remove("hidden");
-        setTimeout(() => letterComposerModal.classList.add("visible"), 10);
-      }, 200);
-    });
-  }
-  
-  if (closeBtn) {
-    closeBtn.addEventListener("click", () => {
-      letterModal.classList.remove("visible");
-      setTimeout(() => letterModal.classList.add("hidden"), 400);
-    });
-  }
-  
-  document
-    .querySelectorAll("#past-letters-container .list-card")
-    .forEach((c) => c.classList.remove("active"));
-  const activeCard = document.querySelector(
-    `#past-letters-container .list-card[data-letter-id='${letter.id}']`,
-  );
-  if (activeCard) activeCard.classList.add("active");
+  currentLetterId = letter.id;
 }
 
 function checkUnreadLetters() {
@@ -320,23 +321,36 @@ const bottleNotificationDot = document.getElementById(
 );
 const bottleReadingPane = document.getElementById("bottle-reading-pane");
 
+// Font picker buttons for new bottle design
+const bottleFontPickerButtons = document.querySelectorAll('.bottle-font-picker-btn');
+
 let localBottles = [];
-let selectedBottleFont = localStorage.getItem('selectedBottleFont') || 'font-letter';
+let selectedBottleFont = localStorage.getItem('selectedBottleFont') || 'pen-caveat';
+let currentBottleId = null;
 
-// Apply saved font preference
-if (bottleFontSelector) {
-  bottleFontSelector.value = selectedBottleFont;
-  bottleTextarea.className = bottleTextarea.className.replace(/font-letter[\w-]*/g, '') + ' ' + selectedBottleFont;
+// Apply saved font preference to textarea
+if (bottleTextarea) {
+  bottleTextarea.className = bottleTextarea.className.replace(/font-[\w-]*/g, '') + ' font-' + selectedBottleFont;
 }
 
-// Font selector change handler
-if (bottleFontSelector) {
-  bottleFontSelector.addEventListener('change', (e) => {
-    selectedBottleFont = e.target.value;
+// Font picker button handlers for new bottle design
+bottleFontPickerButtons.forEach(btn => {
+  // Set initial active state
+  if (btn.dataset.font === selectedBottleFont) {
+    btn.classList.add('active');
+  }
+  
+  btn.addEventListener('click', () => {
+    // Remove active from all buttons
+    bottleFontPickerButtons.forEach(b => b.classList.remove('active'));
+    // Add active to clicked button
+    btn.classList.add('active');
+    
+    selectedBottleFont = btn.dataset.font;
     localStorage.setItem('selectedBottleFont', selectedBottleFont);
-    bottleTextarea.className = bottleTextarea.className.replace(/font-letter[\w-]*/g, '') + ' ' + selectedBottleFont;
+    bottleTextarea.className = bottleTextarea.className.replace(/font-[\w-]*/g, '') + ' font-' + selectedBottleFont;
   });
-}
+});
 
 // Load bottles from sync API
 async function loadBottles() {
@@ -360,45 +374,37 @@ function setMinUnlockDate() {
 
 openBottleModalButton.addEventListener("click", () => {
   bottleModal.classList.remove("hidden");
-  setTimeout(() => bottleModal.classList.add("visible"), 10);
   localStorage.setItem(
     CONFIG.storage.lastOpenedBottles,
     new Date().toISOString(),
   );
   checkUnreadBottles();
+  loadBottles();
 });
 
 closeBottleModalButton.addEventListener("click", () => {
-  bottleModal.classList.remove("visible");
-  setTimeout(() => bottleModal.classList.add("hidden"), 400);
+  bottleModal.classList.add("hidden");
 });
 
 if (createNewBottleButton) {
   createNewBottleButton.addEventListener("click", () => {
-    bottleModal.classList.remove("visible");
-    setTimeout(() => {
-      bottleModal.classList.add("hidden");
-      bottleComposerModal.classList.remove("hidden");
-      setTimeout(() => bottleComposerModal.classList.add("visible"), 10);
-    }, 200);
+    bottleComposerModal.classList.remove("hidden");
+    bottleTextarea.value = "";
+    setMinUnlockDate();
+    bottleTextarea.focus();
   });
 }
 
 if (backToBottlesButton) {
   backToBottlesButton.addEventListener("click", () => {
-    bottleComposerModal.classList.remove("visible");
-    setTimeout(() => {
-      bottleComposerModal.classList.add("hidden");
-      bottleModal.classList.remove("hidden");
-      setTimeout(() => bottleModal.classList.add("visible"), 10);
-    }, 200);
+    bottleComposerModal.classList.add("hidden");
+    bottleModal.classList.remove("hidden");
   });
 }
 
 if (closeBottleComposerButton) {
   closeBottleComposerButton.addEventListener("click", () => {
-    bottleComposerModal.classList.remove("visible");
-    setTimeout(() => bottleComposerModal.classList.add("hidden"), 400);
+    bottleComposerModal.classList.add("hidden");
   });
 }
 
@@ -442,47 +448,51 @@ function renderBottles() {
   if (!pastBottlesContainer) return;
   
   pastBottlesContainer.innerHTML = "";
-  localBottles.forEach((bottle) => {
-    const bottleCard = document.createElement("div");
+  localBottles.forEach((bottle, index) => {
+    const bottleItem = document.createElement("div");
     const isLocked = new Date(bottle.unlockDate) > new Date();
-    bottleCard.className = isLocked
-      ? "list-card p-3 bg-gray-200/30 dark:bg-gray-700/30 rounded-lg opacity-60 cursor-not-allowed locked"
-      : "list-card p-3 bg-white/30 dark:bg-black/20 rounded-lg cursor-pointer hover:bg-white/40 dark:hover:bg-black/30 transition-colors";
-    bottleCard.dataset.bottleId = bottle.id;
+    bottleItem.className = isLocked ? "bottle-item opacity-60 cursor-not-allowed" : "bottle-item";
+    bottleItem.dataset.bottleId = bottle.id;
+    
     const date = new Date(bottle.unlockDate);
-    const fontClass = bottle.font || 'font-letter';
+    const content = bottle.text || "";
     const preview = isLocked
-      ? "Locked until " + date.toLocaleDateString()
-      : bottle.text.substring(0, 50) + (bottle.text.length > 50 ? "..." : "");
-    bottleCard.innerHTML = `
-      <div class="text-xs text-gray-600 dark:text-gray-400 mb-1">
-        ${isLocked ? "" : ""} ${date.toLocaleDateString()}
-      </div>
-      <div class="text-sm text-gray-800 dark:text-gray-100 ${fontClass}">${preview}</div>
+      ? "🔒 Locked until " + date.toLocaleDateString()
+      : content.substring(0, 80) + (content.length > 80 ? "..." : "");
+    
+    const status = isLocked ? "Locked" : "Ready to open";
+    
+    bottleItem.innerHTML = `
+      <div class="bottle-item-date">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+      <div class="bottle-item-preview">${preview}</div>
+      <div class="bottle-item-status">${status}</div>
     `;
-    pastBottlesContainer.appendChild(bottleCard);
+    
+    if (!isLocked) {
+      bottleItem.addEventListener('click', () => {
+        // Remove active class from all items
+        document.querySelectorAll('.bottle-item').forEach(item => item.classList.remove('active'));
+        // Add active class to clicked item
+        bottleItem.classList.add('active');
+        // Display the bottle
+        displayBottle(bottle);
+      });
+    }
+    
+    pastBottlesContainer.appendChild(bottleItem);
   });
-  const now = new Date();
 
   if (localBottles.length === 0) {
     pastBottlesContainer.innerHTML = `
-      <div class="text-center text-gray-500 dark:text-gray-400 py-8">
-        <p class="text-sm">No bottles yet</p>
-        <p class="text-xs mt-2">Create your first bottle to get started</p>
+      <div style="text-align: center; padding: 32px 16px; color: rgba(255, 255, 255, 0.4);">
+        <p style="font-size: 14px; margin-bottom: 8px;">No bottles yet</p>
+        <p style="font-size: 12px;">Click "Create New Bottle" to send your first message to the future</p>
       </div>
     `;
   }
 }
 
-pastBottlesContainer.addEventListener("click", (e) => {
-  const card = e.target.closest(".list-card:not(.locked)");
-  if (card) {
-    const bottle = localBottles.find(
-      (b) => b.id === Number(card.dataset.bottleId),
-    );
-    if (bottle) displayBottle(bottle);
-  }
-});
+// Bottle selection is now handled in renderBottles function
 
 function displayBottle(bottle) {
   if (!bottleReadingPane) return;
@@ -490,23 +500,32 @@ function displayBottle(bottle) {
   const isLocked = new Date(bottle.unlockDate) > new Date();
   if (isLocked) {
     bottleReadingPane.innerHTML = `
-      <div class="text-center mt-20">
-        <div class="text-6xl mb-4">🔒</div>
-        <p class="text-xl text-gray-600 dark:text-gray-400">This bottle is locked</p>
-        <p class="text-sm text-gray-500 dark:text-gray-500 mt-2">It will unlock on ${new Date(
-          bottle.unlockDate,
-        ).toLocaleDateString()}</p>
+      <div class="h-full flex items-center justify-center">
+        <div class="text-center text-white/40">
+          <div class="text-6xl mb-6">🔒</div>
+          <h3 class="text-xl font-handwriting mb-2 text-white/60">This bottle is sealed</h3>
+          <p class="text-sm">It will unlock on ${new Date(bottle.unlockDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+        </div>
       </div>
     `;
   } else {
-    const date = new Date(bottle.createdAt);
-    const fontClass = bottle.font || 'font-letter';
+    const createdDate = new Date(bottle.createdAt);
+    const unlockDate = new Date(bottle.unlockDate);
+    const content = bottle.text || "";
+    const fontClass = 'font-' + (bottle.font || 'pen-caveat');
+    
     bottleReadingPane.innerHTML = `
-      <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">${date.toLocaleDateString()} at ${date.toLocaleTimeString()}</div>
-      <div class="whitespace-pre-wrap ${fontClass}">${bottle.text}</div>
+      <div class="bottle-content">
+        <div class="bottle-content-date">Created ${createdDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+        <div class="bottle-content-body ${fontClass}">${content}</div>
+        <div class="bottle-content-unlock">
+          <strong>🍾 Unlocked:</strong> ${unlockDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+        </div>
+      </div>
     `;
   }
-  if (activeCard) activeCard.classList.add("active");
+  
+  currentBottleId = bottle.id;
 }
 
 function checkUnreadBottles() {
