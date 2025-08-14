@@ -519,7 +519,7 @@ function displayBottle(bottle) {
         <div class="bottle-content-date">Created ${createdDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
         <div class="bottle-content-body ${fontClass}">${content}</div>
         <div class="bottle-content-unlock">
-          <strong>🍾 Unlocked:</strong> ${unlockDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          <strong>Unlocked:</strong> ${unlockDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </div>
       </div>
     `;
@@ -1704,49 +1704,49 @@ async function getWeatherData() {
     let weatherClass = "";
     switch (weatherMain) {
       case "Thunderstorm":
-        statusText = `⛈️ A storm is passing by in ${weatherData.name}. ${weatherData.temp}°C`;
+        statusText = `A storm is passing by in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "thunderstorm";
         break;
       case "Drizzle":
-        statusText = `🌦️ A gentle drizzle is falling in ${weatherData.name}. ${weatherData.temp}°C`;
+        statusText = `A gentle drizzle is falling in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "drizzle";
         break;
       case "Rain":
-        statusText = `🌧️ It's raining in ${weatherData.name}. ${weatherData.temp}°C`;
+        statusText = `It's raining in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "rain";
         break;
       case "Snow":
-        statusText = `❄️ It's snowing in ${weatherData.name}. ${weatherData.temp}°C`;
+        statusText = `It's snowing in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "snow";
         break;
       case "Mist":
       case "Fog":
-        statusText = `🌫️ Misty conditions in ${weatherData.name}. ${weatherData.temp}°C`;
+        statusText = `Misty conditions in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "foggy";
         break;
       case "Smoke":
       case "Haze":
       case "Dust":
-        statusText = `🌫️ Hazy conditions in ${weatherData.name}. ${weatherData.temp}°C`;
+        statusText = `Hazy conditions in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "hazy";
         break;
       case "Sand":
       case "Ash":
-        statusText = `🌪️ Dusty conditions in ${weatherData.name}. ${weatherData.temp}°C`;
+        statusText = `Dusty conditions in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "dusty";
         break;
       case "Squall":
       case "Tornado":
-        statusText = `🌪️ Severe weather in ${weatherData.name}. ${weatherData.temp}°C`;
+        statusText = `Severe weather in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "severe";
         break;
       case "Clouds":
-        statusText = `☁️ It's cloudy in ${weatherData.name}. ${weatherData.temp}°C`;
+        statusText = `It's cloudy in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "cloudy";
         break;
       case "Clear":
       default:
-        statusText = `☀️ The sky is clear in ${weatherData.name}. ${weatherData.temp}°C`;
+        statusText = `The sky is clear in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "clear";
         break;
     }
@@ -1802,49 +1802,49 @@ function setWeatherUIFromMain(main, cityName = 'Test City', tempC = null) {
   let weatherClass = '';
   switch (weatherMain) {
     case 'Thunderstorm':
-      statusText = `⛈️ A storm is passing by in ${weatherData.name}. ${weatherData.temp}°C`;
+      statusText = `A storm is passing by in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'thunderstorm';
       break;
     case 'Drizzle':
-      statusText = `🌦️ A gentle drizzle is falling in ${weatherData.name}. ${weatherData.temp}°C`;
+      statusText = `A gentle drizzle is falling in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'drizzle';
       break;
     case 'Rain':
-      statusText = `🌧️ It's raining in ${weatherData.name}. ${weatherData.temp}°C`;
+      statusText = `It's raining in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'rain';
       break;
     case 'Snow':
-      statusText = `❄️ It's snowing in ${weatherData.name}. ${weatherData.temp}°C`;
+      statusText = `It's snowing in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'snow';
       break;
     case 'Mist':
     case 'Fog':
-      statusText = `🌫️ Misty conditions in ${weatherData.name}. ${weatherData.temp}°C`;
+      statusText = `Misty conditions in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'foggy';
       break;
     case 'Smoke':
     case 'Haze':
     case 'Dust':
-      statusText = `🌫️ Hazy conditions in ${weatherData.name}. ${weatherData.temp}°C`;
+      statusText = `Hazy conditions in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'hazy';
       break;
     case 'Sand':
     case 'Ash':
-      statusText = `🌪️ Dusty conditions in ${weatherData.name}. ${weatherData.temp}°C`;
+      statusText = `Dusty conditions in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'dusty';
       break;
     case 'Squall':
     case 'Tornado':
-      statusText = `🌪️ Severe weather in ${weatherData.name}. ${weatherData.temp}°C`;
+      statusText = `Severe weather in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'severe';
       break;
     case 'Clouds':
-      statusText = `☁️ It's cloudy in ${weatherData.name}. ${weatherData.temp}°C`;
+      statusText = `It's cloudy in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'cloudy';
       break;
     case 'Clear':
     default:
-      statusText = `☀️ The sky is clear in ${weatherData.name}. ${weatherData.temp}°C`;
+      statusText = `The sky is clear in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'clear';
       break;
   }
@@ -2235,14 +2235,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (uiV2 === 'on') {
     localStorage.setItem('uiVersion', 'v2');
     document.body.setAttribute('data-ui', 'v2');
-    console.log('🎨 UI v2 enabled - Enhanced glass morphism active');
+    console.log('UI v2 enabled - Enhanced glass morphism active');
   } else if (uiV2 === 'off') {
     localStorage.removeItem('uiVersion');
     document.body.removeAttribute('data-ui');
-    console.log('🎨 UI v1 active - Original styling');
+    console.log('UI v1 active - Original styling');
   } else if (storedUIVersion === 'v2') {
     document.body.setAttribute('data-ui', 'v2');
-    console.log('🎨 UI v2 restored from localStorage');
+    console.log('UI v2 restored from localStorage');
   }
   
   // Weather override via URL (?weather=Rain), localStorage, or default to live
@@ -2351,7 +2351,7 @@ function setupInteractiveGlass() {
     });
   });
   
-  console.log('🎨 Interactive glass effects initialized for', interactiveElements.length, 'elements');
+  console.log('Interactive glass effects initialized for', interactiveElements.length, 'elements');
 }
 
 // UI v2 Font Picker System
@@ -2390,7 +2390,7 @@ function applyV2Font(fontClass) {
   
   // Save to localStorage
   localStorage.setItem('v2SelectedFont', fontClass);
-  console.log('🖋️ Font applied:', fontClass);
+  console.log('Font applied:', fontClass);
 }
 
 function initializeV2FontPicker() {
@@ -2409,7 +2409,7 @@ function initializeV2FontPicker() {
   const savedFont = localStorage.getItem('v2SelectedFont') || 'pen-kalam';
   applyV2Font(savedFont);
   
-  console.log('🖋️ v2 Font picker initialized');
+  console.log('v2 Font picker initialized');
 }
 
 // v2 Enhanced Modal Animations
@@ -2600,7 +2600,7 @@ function enhanceV2ListCards() {
   enhanceCardHovers();
   observeNewCards();
   
-  console.log('🎨 v2 List cards enhanced with organic rotation and micro-interactions');
+  console.log('v2 List cards enhanced with organic rotation and micro-interactions');
 }
 
 // v2 Enhanced Reading Pane Paper Surface
