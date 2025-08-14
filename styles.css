@@ -7,6 +7,395 @@ body {
     position: relative;
 }
 
+/* ============================================
+   HOME SCREEN GLASSY DESIGN SYSTEM
+   ============================================ */
+
+/* Glassy Button Base */
+.glassy-button {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.glassy-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at var(--x, 50%) var(--y, 50%),
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.glassy-button:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.1),
+        0 6px 6px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.glassy-button:hover::before {
+    opacity: 1;
+}
+
+.glassy-button:active {
+    transform: translateY(0);
+    box-shadow: 
+        0 5px 10px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Dark mode adjustments for buttons */
+body.dark .glassy-button {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+body.dark .glassy-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Glassy Popup (Guide) */
+.glassy-popup {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 280px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+#kitty-guide:hover .glassy-popup,
+#kitty-guide button:focus + .glassy-popup {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Memory Card Container */
+.content-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 30;
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+}
+
+.memory-card-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Memory Navigation Arrows */
+.memory-nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 12px;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 10;
+}
+
+.memory-nav-arrow.left {
+    left: -60px;
+}
+
+.memory-nav-arrow.right {
+    right: -60px;
+}
+
+.memory-nav-arrow.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.memory-nav-arrow:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-50%) scale(1.05);
+}
+
+/* Glassy Memory Card */
+.memory-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    animation: cardFloat 6s ease-in-out infinite;
+}
+
+@keyframes cardFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.memory-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at var(--x, 50%) var(--y, 50%),
+        rgba(255, 255, 255, 0.15) 0%,
+        transparent 50%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.memory-card:hover::before {
+    opacity: 1;
+}
+
+/* Memory Card Header */
+.memory-card-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.memory-title {
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.95);
+    margin: 0;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+body.dark .memory-title {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+body.light .memory-title {
+    color: rgba(0, 0, 0, 0.85);
+}
+
+/* Memory Image Container */
+.memory-image-container {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 20px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.03) 0%, rgba(0, 0, 0, 0.08) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.memory-image-container:hover .memory-image {
+    transform: scale(1.02);
+}
+
+.memory-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+    transition: transform 0.3s ease;
+}
+
+/* Fallback for broken or missing images */
+.memory-image:not([src]),
+.memory-image[src=""],
+.memory-image[src*="placeholder"] {
+    object-fit: contain;
+    opacity: 0.6;
+}
+
+/* Loading state */
+.memory-image-container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top: 3px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.memory-image-container.loading::before {
+    opacity: 1;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+/* Memory Text */
+.memory-text-container {
+    margin-bottom: 20px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.memory-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
+    text-align: center;
+    margin: 0;
+    opacity: 0;
+    animation: fadeIn 0.5s ease 0.2s forwards;
+}
+
+body.dark .memory-text {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+body.light .memory-text {
+    color: rgba(0, 0, 0, 0.75);
+}
+
+/* Memory Timer */
+.memory-timer-container {
+    text-align: center;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.memory-timer {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    font-weight: 300;
+}
+
+body.dark .memory-timer {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+body.light .memory-timer {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .content-wrapper {
+        padding: 16px;
+    }
+    
+    .memory-nav-arrow.left {
+        left: 10px;
+    }
+    
+    .memory-nav-arrow.right {
+        right: 10px;
+    }
+    
+    .memory-card {
+        padding: 20px;
+    }
+    
+    .memory-title {
+        font-size: 20px;
+    }
+    
+    .memory-image-container {
+        height: 160px;
+    }
+    
+    .memory-text {
+        font-size: 14px;
+    }
+    
+    .memory-timer {
+        font-size: 12px;
+    }
+}
+
+/* Notification dots */
+.notification-dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
 /* Enhanced backgrounds with subtle gradients - PERMANENT COLORS */
 body.dark {
     background: linear-gradient(135deg, #000000 0%, #0a0a0a 100%) !important;
@@ -15,6 +404,14 @@ body.dark {
 body.light,
 body:not(.dark) {
     background: linear-gradient(135deg, #87ceeb 0%, #87ceeb 100%) !important;
+}
+
+/* Weather status text styling */
+#weather-status {
+    font-size: 14px;
+    opacity: 0.7;
+    font-weight: 300;
+    letter-spacing: 0.5px;
 }
 
 /* Weather effects overlay - subtle atmospheric effects without changing base colors */
@@ -1297,16 +1694,25 @@ body.light .bottle-create-btn:hover {
     }
 }
 
-/* Weather status mobile positioning */
+/* Weather status positioning - below the Jane Doe card */
 #weather-status {
-    bottom: 5rem;
+    bottom: 6rem;
     font-size: 0.875rem;
-    padding: 0 1rem;
+    padding: 0.5rem 1rem;
+    max-width: 90vw;
+    margin: 0 auto;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%
+    );
+    backdrop-filter: blur(10px);
+    border-radius: 2rem;
 }
 
 @media (min-width: 640px) {
     #weather-status {
-        bottom: 4rem;
+        bottom: 5rem;
         font-size: 1rem;
     }
 }
@@ -1363,21 +1769,7 @@ input[type="date"] {
     opacity: 0.7;
 }
 
-/* Weather status positioning */
-#weather-status {
-    bottom: 80px;
-    font-size: 0.875rem;
-    padding: 0.5rem 1rem;
-    background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.1) 0%,
-        rgba(255, 255, 255, 0.05) 100%
-    );
-    backdrop-filter: blur(10px);
-    border-radius: 2rem;
-    max-width: 90vw;
-    margin: 0 auto;
-}
+
 
 /* Custom Icon Styling */
 .ui-button img {
