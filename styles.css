@@ -4,17 +4,34 @@ body {
     overflow: hidden;
     transition: background 0.5s ease-in-out;
     touch-action: manipulation;
+    position: relative;
 }
 
-/* Black background for dark mode */
+/* Enhanced backgrounds with subtle gradients */
 body.dark {
-    background: #000000;
+    background: linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
 }
 
-/* Original light mode */
 body.light,
 body:not(.dark) {
-    background: #bfdbfe; /* Light blue-200 like original */
+    background: linear-gradient(135deg, #bfdbfe 0%, #a5c9ea 100%);
+}
+
+/* Subtle noise texture for depth */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 35px,
+            rgba(255, 255, 255, 0.01) 35px,
+            rgba(255, 255, 255, 0.01) 70px
+        );
+    pointer-events: none;
+    z-index: 1;
 }
 
 
@@ -107,8 +124,14 @@ body:not(.dark) {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    padding: 0.5rem;
+    padding: 1rem;
     background-color: transparent;
+}
+
+@media (min-width: 640px) {
+    .content-wrapper {
+        padding: 2rem;
+    }
 }
 
 #text-container {
@@ -154,62 +177,115 @@ body:not(.dark) {
     transform: scale(1);
 }
 
-/* Refined Glassmorphism Effect */
+/* Enhanced Glassmorphism Effect - Next Level */
 .glass-ui {
-    background-color: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.08) 100%
+    );
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 
+        0 8px 32px 0 rgba(31, 38, 135, 0.15),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 0 80px rgba(255, 255, 255, 0.02);
+    position: relative;
+}
+
+.glass-ui::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.3),
+        rgba(255, 255, 255, 0.05)
+    );
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
 }
 
 .dark .glass-ui {
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.06) 0%,
+        rgba(255, 255, 255, 0.02) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+        0 0 80px rgba(255, 255, 255, 0.01);
 }
 
-/* Interactive Glass Highlight */
+.dark .glass-ui::before {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15),
+        rgba(255, 255, 255, 0.03)
+    );
+}
+
+/* Enhanced Interactive Glass with Shimmer Effect */
 .interactive-glass {
     position: relative;
     overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.interactive-glass::before {
+.interactive-glass::after {
     content: "";
     position: absolute;
     top: var(--y, 50%);
     left: var(--x, 50%);
     transform: translate(-50%, -50%);
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
     background: radial-gradient(
         circle,
-        rgba(255, 255, 255, 0.25) 0%,
-        rgba(255, 255, 255, 0) 70%
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.08) 25%,
+        rgba(255, 255, 255, 0.03) 50%,
+        transparent 70%
     );
     opacity: 0;
-    transition: opacity 0.4s ease-out;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
+    mix-blend-mode: screen;
 }
 
 @media (min-width: 640px) {
-    .interactive-glass::before {
-        width: 350px;
-        height: 350px;
+    .interactive-glass::after {
+        width: 500px;
+        height: 500px;
     }
 }
 
-.interactive-glass:hover::before {
+.interactive-glass:hover::after {
     opacity: 1;
 }
 
-.dark .interactive-glass::before {
+.interactive-glass:hover {
+    transform: translateY(-2px);
+}
+
+.dark .interactive-glass::after {
     background: radial-gradient(
         circle,
-        rgba(255, 255, 255, 0.1) 0%,
-        rgba(255, 255, 255, 0) 70%
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.04) 25%,
+        rgba(255, 255, 255, 0.02) 50%,
+        transparent 70%
     );
+    mix-blend-mode: overlay;
 }
 
 /* Notification Dot */
@@ -231,43 +307,78 @@ body:not(.dark) {
 }
 
 .list-card {
-    transition:
-        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-        background-color 0.3s ease-in-out,
-        box-shadow 0.3s ease-in-out;
-    background-color: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.25) 0%,
+        rgba(255, 255, 255, 0.15) 100%
+    );
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 
+        0 4px 16px rgba(31, 38, 135, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     touch-action: manipulation;
+    position: relative;
+}
+
+.list-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+        to bottom right,
+        transparent 40%,
+        rgba(255, 255, 255, 0.05) 100%
+    );
+    pointer-events: none;
 }
 
 .dark .list-card {
-    background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.03) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.12);
     color: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .list-card:hover,
 .list-card:active {
-    transform: scale(1.03) rotate(0) !important;
-    z-index: 20 !important;
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px) scale(1.02);
+    z-index: 20;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.35) 0%,
+        rgba(255, 255, 255, 0.25) 100%
+    );
+    box-shadow: 
+        0 12px 28px rgba(31, 38, 135, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 @media (min-width: 640px) {
     .list-card:hover {
-        transform: scale(1.05) rotate(0) !important;
+        transform: translateY(-3px) scale(1.03);
     }
 }
 
 .dark .list-card:hover,
 .dark .list-card:active {
-    background-color: rgba(0, 0, 0, 0.7);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.12) 0%,
+        rgba(255, 255, 255, 0.06) 100%
+    );
+    box-shadow: 
+        0 12px 28px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .list-card.active {
@@ -322,58 +433,88 @@ body:not(.dark) {
     opacity: 1;
 }
 
-/* Memory Lane Arrow Buttons */
+/* Enhanced Memory Arrow Glass Buttons */
 .memory-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
-    background: rgba(0, 0, 0, 0.2);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.08) 100%
+    );
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    padding: 0.25rem;
+    padding: 0.5rem;
     opacity: 0;
     pointer-events: none;
-    transition:
-        opacity 0.5s ease,
-        transform 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     min-height: 44px;
     min-width: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 @media (min-width: 640px) {
     .memory-arrow {
-        padding: 0.5rem;
+        padding: 0.625rem;
+        min-height: 48px;
+        min-width: 48px;
     }
 }
 
 .memory-arrow:hover,
 .memory-arrow:active {
-    background: rgba(0, 0, 0, 0.4);
-    transform: translateY(-50%) scale(1.1);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.25) 0%,
+        rgba(255, 255, 255, 0.15) 100%
+    );
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .memory-arrow.visible {
-    opacity: 0.7;
+    opacity: 0.9;
     pointer-events: auto;
 }
 
+.dark .memory-arrow {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.dark .memory-arrow:hover {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.18) 0%,
+        rgba(255, 255, 255, 0.1) 100%
+    );
+}
+
 #prev-memory {
-    left: 0.25rem;
+    left: 0.5rem;
 }
 
 #next-memory {
-    right: 0.25rem;
+    right: 0.5rem;
 }
 
 @media (min-width: 768px) {
     #prev-memory {
-        left: -2.5rem;
+        left: -3rem;
     }
     #next-memory {
-        right: -2.5rem;
+        right: -3rem;
     }
 }
 
@@ -429,15 +570,52 @@ body:not(.dark) {
     display: block;
 }
 
-/* Button adjustments for mobile */
+/* Enhanced Button Glass Effect */
 .ui-button {
-    padding: 0.5rem;
+    padding: 0.625rem;
     min-height: 44px;
     min-width: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     touch-action: manipulation;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%
+    );
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ui-button:hover {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.1) 100%
+    );
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dark .ui-button {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.03) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .ui-button:hover {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.08) 100%
+    );
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
 }
 
 @media (min-width: 640px) {
@@ -446,18 +624,29 @@ body:not(.dark) {
     }
 }
 
-/* Modal responsive adjustments */
+/* Enhanced Modal Glass with Better Mobile Fit */
 .modal-content {
-    width: 95vw;
+    width: calc(100vw - 1rem);
     max-width: 95vw;
-    height: 90vh;
-    max-height: 90vh;
+    height: auto;
+    max-height: calc(100vh - 2rem);
+    margin: 0.5rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
     .modal-content {
         width: 90vw;
-        max-width: 1024px;
+        max-width: 900px;
+        height: auto;
+        max-height: 85vh;
+        margin: auto;
+    }
+}
+
+@media (min-width: 1024px) {
+    .modal-content {
+        width: 85vw;
+        max-width: 1200px;
         height: 85vh;
     }
 }
@@ -482,25 +671,45 @@ body:not(.dark) {
     overscroll-behavior: contain;
 }
 
-/* Fix for mobile modal layout */
+/* Optimized Mobile Modal Layout */
 .modal-sidebar {
-    min-height: 40vh;
-    max-height: 40vh;
+    height: 100%;
+    max-height: 100%;
 }
 
 .modal-main {
-    min-height: 50vh;
-    max-height: 50vh;
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 767px) {
+    .modal-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 75vw;
+        max-width: 320px;
+        z-index: 50;
+    }
+    
+    .modal-main {
+        width: 100%;
+        padding-top: 3rem;
+    }
 }
 
 @media (min-width: 768px) {
     .modal-sidebar {
-        min-height: 100%;
-        max-height: 100%;
+        position: relative;
+        width: 33.333%;
+        max-width: none;
     }
+    
     .modal-main {
-        min-height: 100%;
-        max-height: 100%;
+        padding-top: 0;
     }
 }
 
@@ -541,84 +750,93 @@ input[type="date"] {
     touch-action: manipulation;
 }
 
-/* Mobile Sidebar Enhancements */
+/* Enhanced Mobile Experience */
 @media (max-width: 767px) {
     .modal-sidebar {
-        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(255, 255, 255, 0.9) 100%
+        );
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        box-shadow: 
+            4px 0 24px rgba(0, 0, 0, 0.15),
+            inset -1px 0 0 rgba(255, 255, 255, 0.2);
+    }
+    
+    .dark .modal-sidebar {
+        background: linear-gradient(
+            135deg,
+            rgba(0, 0, 0, 0.95) 0%,
+            rgba(0, 0, 0, 0.9) 100%
+        );
+        box-shadow: 
+            4px 0 24px rgba(0, 0, 0, 0.5),
+            inset -1px 0 0 rgba(255, 255, 255, 0.1);
     }
     
     .modal-sidebar.transform.-translate-x-full {
         box-shadow: none;
     }
     
-    /* Overlay effect on main content when sidebar is open */
-    .modal-main.sidebar-open {
-        filter: brightness(0.7);
-        pointer-events: none;
+    /* Overlay for main content when sidebar is open */
+    .modal-main.sidebar-open::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 40;
+        pointer-events: auto;
     }
     
     /* Better text sizing for mobile */
     .font-letter {
         font-size: 1rem;
-        line-height: 1.6;
+        line-height: 1.75;
     }
     
     /* Improved padding for reading panes on mobile */
     #letter-reading-pane,
     #bottle-reading-pane {
-        padding: 1rem;
+        padding: 1.25rem;
     }
     
-    /* Main content card mobile optimization */
-    .content-wrapper {
-        padding: 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-    }
-    
+    /* Main glass card mobile optimization */
     .glass-ui {
         width: 100%;
-        max-width: 90vw;
+        max-width: calc(100vw - 2rem);
     }
     
     /* Memory container mobile sizing */
     #gif-container {
         width: 100%;
-        max-width: 260px;
-        min-height: 180px;
+        max-width: 280px;
     }
     
-    /* Reduce cloud overlay opacity on mobile for better visibility */
+    /* Weather overlays mobile adjustments */
     #clouds-overlay {
-        opacity: 0.3;
+        opacity: 0.4;
+    }
+    
+    #weather-overlay {
+        opacity: 0.7;
     }
     
     /* Weather status positioning */
     #weather-status {
-        bottom: 100px;
+        bottom: 80px;
         font-size: 0.875rem;
-    }
-    
-    /* Memory arrows positioning */
-    .memory-arrow {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 10;
-        background: rgba(255, 255, 255, 0.1);
+        padding: 0.5rem 1rem;
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.05) 100%
+        );
         backdrop-filter: blur(10px);
-        border-radius: 50%;
-        padding: 0.5rem;
-    }
-    
-    #prev-memory {
-        left: -1rem;
-    }
-    
-    #next-memory {
-        right: -1rem;
+        border-radius: 2rem;
+        max-width: 90vw;
+        margin: 0 auto;
     }
 }
 
@@ -751,52 +969,219 @@ input[type="date"] {
     backdrop-filter: blur(8px);
 }
 
-/* Enhanced glassmorphism for better readability */
+/* Premium Modal Glassmorphism */
 .modal-content {
     background: linear-gradient(
         145deg,
-        rgba(255, 255, 255, 0.3) 0%,
-        rgba(255, 255, 255, 0.2) 100%
+        rgba(255, 255, 255, 0.12) 0%,
+        rgba(255, 255, 255, 0.07) 50%,
+        rgba(255, 255, 255, 0.05) 100%
     );
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        0 24px 48px rgba(31, 38, 135, 0.2),
+        0 8px 16px rgba(31, 38, 135, 0.1),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+
+.modal-content::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+        to bottom right,
+        transparent 40%,
+        rgba(255, 255, 255, 0.03) 100%
+    );
+    pointer-events: none;
 }
 
 .dark .modal-content {
     background: linear-gradient(
         145deg,
-        rgba(0, 0, 0, 0.6) 0%,
-        rgba(0, 0, 0, 0.4) 100%
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.04) 50%,
+        rgba(255, 255, 255, 0.02) 100%
     );
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 24px 48px rgba(0, 0, 0, 0.5),
+        0 8px 16px rgba(0, 0, 0, 0.3),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-/* Better text contrast in modals */
+.dark .modal-content::before {
+    background: linear-gradient(
+        to bottom right,
+        transparent 40%,
+        rgba(255, 255, 255, 0.02) 100%
+    );
+}
+
+/* Enhanced Input Fields with Glass Effect */
 .modal textarea,
 .modal input {
-    background-color: rgba(255, 255, 255, 0.8) !important;
-    color: rgba(0, 0, 0, 0.9) !important;
-    border: 1px solid rgba(0, 0, 0, 0.2) !important;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(255, 255, 255, 0.8) 100%
+    );
+    backdrop-filter: blur(10px);
+    color: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        inset 0 1px 3px rgba(0, 0, 0, 0.1),
+        0 1px 0 rgba(255, 255, 255, 0.5);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal textarea:focus,
+.modal input:focus {
+    outline: none;
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 
+        inset 0 1px 3px rgba(0, 0, 0, 0.1),
+        0 0 0 3px rgba(59, 130, 246, 0.1),
+        0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .dark .modal textarea,
 .dark .modal input {
-    background-color: rgba(0, 0, 0, 0.7) !important;
-    color: rgba(255, 255, 255, 0.95) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.12) 0%,
+        rgba(255, 255, 255, 0.08) 100%
+    );
+    color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        inset 0 1px 3px rgba(0, 0, 0, 0.3),
+        0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark .modal textarea:focus,
+.dark .modal input:focus {
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 
+        inset 0 1px 3px rgba(0, 0, 0, 0.3),
+        0 0 0 3px rgba(59, 130, 246, 0.15),
+        0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Enhanced content transitions */
 #changing-text,
 #changing-gif {
     transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth scrolling for all scrollable areas */
+* {
+    scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.1) 100%
+    );
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0.2) 100%
+    );
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.08) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.25) 0%,
+        rgba(255, 255, 255, 0.15) 100%
+    );
+}
+
+/* Ensure proper touch interactions on mobile */
+@media (hover: none) and (pointer: coarse) {
+    .ui-button:active {
+        transform: scale(0.95);
+    }
+    
+    .list-card:active {
+        transform: scale(0.98);
+    }
+    
+    .memory-arrow:active {
+        transform: translateY(-50%) scale(0.95);
+    }
+}
+
+/* Prevent text selection on UI elements */
+.ui-button,
+.memory-arrow,
+.close-btn,
+#guide-popup {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Ensure modals are properly centered on all screen sizes */
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Fix for iOS Safari bounce scrolling */
+html {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Lightning effect overlay */

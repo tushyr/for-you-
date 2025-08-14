@@ -45,7 +45,7 @@
         <div id="kitty-guide">
             <button
                 type="button"
-                class="ui-button text-gray-800 dark:text-gray-200 hover:bg-gray-500/20 dark:hover:bg-white/20 focus:outline-none rounded-lg transition-colors"
+                class="ui-button rounded-full transition-all duration-300"
             >
                 <img
                     src="resources/icons/origami.svg"
@@ -54,8 +54,8 @@
                 />
             </button>
             <div id="guide-popup" class="glass-ui">
-                <h4 class="font-bold mb-2">Features Guide</h4>
-                <ul class="list-disc list-inside space-y-1">
+                <h4 class="font-bold mb-3 text-sm sm:text-base">Features Guide</h4>
+                <ul class="list-disc list-inside space-y-1.5 text-xs sm:text-sm">
                     <li><b>Memory Lane:</b> Top-right arrows switch modes.</li>
                     <li><b>Dark Mode:</b> Sun/moon icon toggles theme.</li>
                     <li>
@@ -74,12 +74,12 @@
 
         <!-- UI Buttons -->
         <div
-            class="fixed top-2 right-2 sm:top-4 sm:right-4 z-40 flex items-center space-x-1 sm:space-x-2"
+            class="fixed top-2 right-2 sm:top-4 sm:right-4 z-40 flex items-center gap-2"
         >
             <button
                 id="memory-mode-toggle"
                 type="button"
-                class="ui-button text-gray-800 dark:text-gray-200 hover:bg-gray-500/20 dark:hover:bg-white/20 focus:outline-none rounded-lg transition-colors"
+                class="ui-button rounded-full transition-all duration-300"
                 title="Toggle Memory Lane"
             >
                 <svg
@@ -116,7 +116,7 @@
             <button
                 id="theme-toggle"
                 type="button"
-                class="ui-button text-gray-800 dark:text-gray-200 hover:bg-gray-500/20 dark:hover:bg-white/20 focus:outline-none rounded-lg transition-colors"
+                class="ui-button rounded-full transition-all duration-300"
             >
                 <img
                     id="theme-toggle-icon"
@@ -129,12 +129,12 @@
 
         <!-- Corner Buttons -->
         <div
-            class="fixed bottom-2 left-2 sm:bottom-4 sm:left-4 z-40 flex flex-col sm:flex-row items-center space-y-1 space-x-0 sm:space-y-0 sm:space-x-2"
+            class="fixed bottom-4 left-4 z-40 flex flex-row items-center gap-2"
         >
             <button
                 id="constellation-toggle"
                 type="button"
-                class="ui-button text-gray-800 dark:text-gray-200 hover:bg-gray-500/20 dark:hover:bg-white/20 transition-transform hover:scale-110 rounded-lg hidden"
+                class="ui-button rounded-full transition-all duration-300 hidden"
                 title="Draw Constellations"
             >
                 <svg
@@ -155,7 +155,7 @@
             <button
                 id="goodnight-button"
                 type="button"
-                class="ui-button text-gray-800 dark:text-gray-200 hover:bg-gray-500/20 dark:hover:bg-white/20 transition-transform hover:scale-110 rounded-lg"
+                class="ui-button rounded-full transition-all duration-300"
                 title="Goodnight"
             >
                 <img
@@ -167,7 +167,7 @@
             <button
                 id="music-toggle"
                 type="button"
-                class="ui-button text-gray-800 dark:text-gray-200 hover:bg-gray-500/20 dark:hover:bg-white/20 transition-transform hover:scale-110 rounded-lg"
+                class="ui-button rounded-full transition-all duration-300"
             >
                 <svg
                     id="sound-on-icon"
@@ -195,11 +195,11 @@
         </div>
 
         <div
-            class="fixed bottom-2 right-2 sm:bottom-4 sm:right-4 z-40 flex flex-col sm:flex-row items-center space-y-1 space-x-0 sm:space-y-0 sm:space-x-2"
+            class="fixed bottom-4 right-4 z-40 flex flex-row items-center gap-2"
         >
             <button
                 id="open-letter-modal"
-                class="ui-button text-gray-800 dark:text-gray-200 hover:bg-gray-500/20 dark:hover:bg-white/20 transition-transform hover:scale-110 rounded-lg"
+                class="ui-button rounded-full transition-all duration-300 p-1.5 sm:p-2"
             >
                 <div class="relative">
                     <dotlottie-wc
@@ -219,7 +219,7 @@
             </button>
             <button
                 id="open-bottle-modal"
-                class="ui-button text-gray-800 dark:text-gray-200 hover:bg-gray-500/20 dark:hover:bg-white/20 transition-transform hover:scale-110 rounded-lg"
+                class="ui-button rounded-full transition-all duration-300"
             >
                 <div class="relative">
                     <img
@@ -288,35 +288,35 @@
                     </svg>
                 </button>
 
-                <div class="glass-ui rounded-3xl p-6 sm:p-8 md:p-10 interactive-glass shadow-2xl">
+                <div class="glass-ui rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 interactive-glass shadow-2xl">
                     <h1
-                        class="text-3xl sm:text-4xl md:text-5xl text-gray-900 dark:text-gray-100 font-handwriting mb-8 sm:mb-12 text-center"
+                        class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-gray-900 dark:text-gray-100 font-handwriting mb-6 sm:mb-8 md:mb-10 text-center"
                     >
                         For Jane Doe &lt;3
                     </h1>
                     <div
                         id="gif-container"
-                        class="w-full max-w-[280px] sm:max-w-sm md:max-w-md mx-auto my-8 sm:my-12"
+                        class="w-full max-w-[240px] sm:max-w-[280px] md:max-w-sm lg:max-w-md mx-auto my-6 sm:my-8 md:my-10"
                     >
-                        <div class="bg-gradient-to-br from-amber-50/90 to-orange-50/90 dark:from-amber-900/40 dark:to-orange-900/40 rounded-2xl p-6 sm:p-8 shadow-lg backdrop-blur-sm border border-white/20 dark:border-white/10">
+                        <div class="glass-ui rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
                             <img
                                 id="changing-gif"
                                 src=""
                                 alt="A special memory"
-                                class="w-full h-auto rounded-lg object-contain min-h-[160px] sm:min-h-[180px] max-h-[200px] sm:max-h-[220px]"
+                                class="w-full h-auto rounded-lg object-contain min-h-[140px] sm:min-h-[160px] md:min-h-[180px] max-h-[180px] sm:max-h-[200px] md:max-h-[220px]"
                             />
                         </div>
                     </div>
-                    <div id="text-container" class="px-4 sm:px-6 mt-8 sm:mt-12">
+                    <div id="text-container" class="px-2 sm:px-4 md:px-6 mt-6 sm:mt-8 md:mt-10">
                         <p
                             id="changing-text"
-                            class="text-lg sm:text-xl md:text-2xl font-medium text-gray-800 dark:text-gray-200 leading-relaxed text-center mb-4 sm:mb-6"
+                            class="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-gray-800 dark:text-gray-200 leading-relaxed text-center mb-3 sm:mb-4 md:mb-6"
                         ></p>
                     </div>
-                    <div class="mt-4 sm:mt-6 space-y-3 pb-4 sm:pb-6">
+                    <div class="mt-3 sm:mt-4 md:mt-6 space-y-2 sm:space-y-3 pb-3 sm:pb-4 md:pb-6">
                         <p
                             id="timer"
-                            class="text-sm sm:text-base text-gray-600 dark:text-gray-400 text-center"
+                            class="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400 text-center"
                         ></p>
                     </div>
                 </div>
@@ -326,18 +326,17 @@
         <!-- Letter Modal (Inbox View) -->
         <div
             id="letter-modal"
-            class="modal hidden fixed inset-0 flex items-center justify-center z-50 p-2 sm:p-4"
+            class="modal hidden fixed inset-0 flex items-center justify-center z-50 p-4"
         >
             <div
-                class="glass-ui rounded-2xl shadow-2xl modal-content flex flex-col overflow-hidden w-full max-h-[85vh] relative"
-                style="max-width: min(95vw, 1200px);"
+                class="glass-ui rounded-xl sm:rounded-2xl shadow-2xl modal-content flex flex-col md:flex-row overflow-hidden w-full relative"
             >
                 <!-- Mobile Toggle Button -->
                 <button
                     id="toggle-letter-sidebar"
-                    class="md:hidden absolute top-4 left-4 z-10 bg-white/20 dark:bg-black/20 backdrop-blur-sm rounded-lg p-2 text-gray-800 dark:text-gray-100 hover:bg-white/30 dark:hover:bg-black/30 transition-colors"
+                    class="md:hidden absolute top-3 left-3 z-50 ui-button rounded-full p-2.5"
                 >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
@@ -345,7 +344,7 @@
                 <!-- Sidebar -->
                 <div
                     id="letter-sidebar"
-                    class="modal-sidebar flex flex-col border-b md:border-b-0 md:border-r border-white/20 absolute md:relative z-20 md:z-auto bg-white/95 dark:bg-black/95 md:bg-transparent backdrop-blur-md md:backdrop-blur-none transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out w-80 md:w-1/3 h-full md:h-auto"
+                    class="modal-sidebar flex flex-col border-b md:border-b-0 md:border-r border-white/20 absolute md:relative transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out"
                 >
                     <div class="p-3 sm:p-4 border-b border-white/20 flex-shrink-0">
                         <h3 class="text-lg sm:text-xl font-handwriting text-gray-800 dark:text-gray-100 mb-3">
@@ -374,9 +373,9 @@
                 >
                     <button
                         id="close-letter-modal"
-                        class="close-btn absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-800 dark:text-gray-100 hover:text-black dark:hover:text-white text-xl sm:text-2xl z-30"
+                        class="close-btn absolute top-3 right-3 sm:top-4 sm:right-4 ui-button rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-lg sm:text-xl font-semibold z-30"
                     >
-                        &times;
+                        ×
                     </button>
                     <div
                         id="letter-reading-pane"
