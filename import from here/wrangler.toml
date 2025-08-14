@@ -1,0 +1,12 @@
+name = "for-you-sync"
+main = "worker.js"
+compatibility_date = "2023-12-01"
+
+[[kv_namespaces]]
+binding = "SYNC_KV"
+id = "c3b0d1e9e892462e9a429e8234147e10"
+
+[env.production]
+kv_namespaces = [
+  { binding = "SYNC_KV", id = "c3b0d1e9e892462e9a429e8234147e10" }
+]
