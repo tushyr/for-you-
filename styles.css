@@ -445,8 +445,8 @@ body.light .memory-timer {
 /* Enhanced Header */
 .memory-card-header-enhanced {
     text-align: center;
-    margin-bottom: 24px;
-    padding-bottom: 20px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     position: relative;
     display: flex;
@@ -499,7 +499,7 @@ body.light .memory-timer {
 /* Enhanced Image Frame */
 .memory-image-frame {
     position: relative;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 }
 
 .memory-image-container-enhanced {
@@ -529,72 +529,23 @@ body.light .memory-timer {
     transition: transform 0.3s ease;
 }
 
-/* Corner accents */
+/* Corner accents - REMOVED */
 .image-corner-accent {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.image-corner-accent.top-left {
-    top: -8px;
-    left: -8px;
-    border-right: none;
-    border-bottom: none;
-    border-top-left-radius: 8px;
-}
-
-.image-corner-accent.top-right {
-    top: -8px;
-    right: -8px;
-    border-left: none;
-    border-bottom: none;
-    border-top-right-radius: 8px;
-}
-
-.image-corner-accent.bottom-left {
-    bottom: -8px;
-    left: -8px;
-    border-right: none;
-    border-top: none;
-    border-bottom-left-radius: 8px;
-}
-
-.image-corner-accent.bottom-right {
-    bottom: -8px;
-    right: -8px;
-    border-left: none;
-    border-top: none;
-    border-bottom-right-radius: 8px;
+    display: none;
 }
 
 /* Enhanced Text with Quotes */
 .memory-text-wrapper {
     position: relative;
-    margin-bottom: 24px;
-    min-height: 70px;
+    margin-bottom: 12px;
+    min-height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .quote-mark {
-    position: absolute;
-    font-size: 48px;
-    color: rgba(255, 255, 255, 0.08);
-    font-family: Georgia, serif;
-    line-height: 1;
-}
-
-.quote-mark.left {
-    left: -10px;
-    top: -10px;
-}
-
-.quote-mark.right {
-    right: -10px;
-    bottom: -10px;
+    display: none;
 }
 
 .memory-text-container-enhanced {
@@ -615,7 +566,7 @@ body.light .memory-timer {
 /* Enhanced Timer with Pulse */
 .memory-timer-wrapper {
     text-align: center;
-    padding-top: 20px;
+    padding-top: 8px;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     position: relative;
 }
@@ -644,11 +595,15 @@ body.light .memory-timer {
 }
 
 .memory-timer-enhanced {
-    font-size: 14px;
+    font-size: 12px;
     color: rgba(255, 255, 255, 0.65);
     margin: 0;
     font-weight: 300;
     letter-spacing: 0.3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 /* Light mode adjustments */
@@ -665,11 +620,11 @@ body.light .memory-timer-enhanced {
 }
 
 body.light .quote-mark {
-    color: rgba(0, 0, 0, 0.08);
+    display: none;
 }
 
 body.light .image-corner-accent {
-    border-color: rgba(0, 0, 0, 0.15);
+    display: none;
 }
 
 /* Responsive adjustments */
@@ -691,7 +646,7 @@ body.light .image-corner-accent {
     }
     
     .quote-mark {
-        font-size: 36px;
+        display: none;
     }
 }
 
@@ -1408,6 +1363,11 @@ body.light .bottle-create-btn:hover {
 
 #timer {
     white-space: nowrap;
+    text-align: center;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
 }
 
 /* Font Picker Button Styles */
@@ -2074,6 +2034,11 @@ body.light .bottle-create-btn:hover {
     text-align: center;
     z-index: 40;
     pointer-events: none;
+    width: auto;
+    max-width: 90vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 body.light #weather-status {
@@ -3325,6 +3290,12 @@ body {
     -webkit-backdrop-filter: blur(12px) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     border-radius: 1rem !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    max-width: 85vw !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
 [data-ui="v2"].dark #weather-status {
