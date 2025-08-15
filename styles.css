@@ -7,17 +7,163 @@ body {
     position: relative;
 }
 
+/* Enable scrolling on mobile */
+@media (max-width: 640px) {
+    body {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Optimize fixed UI elements for mobile - 44px hit targets */
+    .glassy-button {
+        padding: 10px !important;
+        border-radius: 12px !important;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .glassy-button svg,
+    .glassy-button img {
+        width: 20px !important;
+        height: 20px !important;
+    }
+    
+    /* Reduce top UI spacing */
+    .fixed.top-4.right-4 {
+        top: 12px !important;
+        right: 12px !important;
+        gap: 8px !important;
+    }
+    
+    .fixed.top-4.left-4 {
+        top: 12px !important;
+        left: 12px !important;
+    }
+    
+    /* Reduce bottom UI spacing */
+    .fixed.bottom-4.left-4 {
+        bottom: 12px !important;
+        left: 12px !important;
+        gap: 8px !important;
+    }
+    
+    .fixed.bottom-4.right-4 {
+        bottom: 12px !important;
+        right: 12px !important;
+        gap: 8px !important;
+    }
+}
+
+/* Safe Area Support for iOS notches and home indicators */
+@supports (padding: max(0px)) {
+    @media (max-width: 640px) {
+        .content-wrapper {
+            padding-top: max(clamp(12px, 3vw, 20px), env(safe-area-inset-top)) !important;
+            padding-left: max(clamp(12px, 3vw, 20px), env(safe-area-inset-left)) !important;
+            padding-right: max(clamp(12px, 3vw, 20px), env(safe-area-inset-right)) !important;
+            padding-bottom: max(clamp(12px, 3vw, 20px), env(safe-area-inset-bottom)) !important;
+        }
+        
+        .fixed.top-4.right-4 {
+            top: max(12px, env(safe-area-inset-top)) !important;
+            right: max(12px, env(safe-area-inset-right)) !important;
+        }
+        
+        .fixed.top-4.left-4 {
+            top: max(12px, env(safe-area-inset-top)) !important;
+            left: max(12px, env(safe-area-inset-left)) !important;
+        }
+        
+        .fixed.bottom-4.left-4 {
+            bottom: max(12px, env(safe-area-inset-bottom)) !important;
+            left: max(12px, env(safe-area-inset-left)) !important;
+        }
+        
+        .fixed.bottom-4.right-4 {
+            bottom: max(12px, env(safe-area-inset-bottom)) !important;
+            right: max(12px, env(safe-area-inset-right)) !important;
+        }
+        
+        #weather-status {
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            right: auto !important;
+        }
+        
+        /* Mobile safe area - much higher position */
+        @media (max-width: 640px) {
+            #weather-status {
+                bottom: max(6rem, calc(6rem + env(safe-area-inset-bottom))) !important;
+            }
+        }
+        
+        /* Desktop safe area - normal position */
+        @media (min-width: 641px) {
+            #weather-status {
+                bottom: max(4rem, calc(4rem + env(safe-area-inset-bottom))) !important;
+            }
+        }
+    }
+}
+
 /* ============================================
    HOME SCREEN GLASSY DESIGN SYSTEM
    ============================================ */
 
-/* Glassy Button Base */
+/* Standardize all icon sizes globally - Override Tailwind classes */
+.glassy-button svg,
+.glassy-button img,
+button svg,
+button img {
+    width: 20px !important;
+    height: 20px !important;
+    flex-shrink: 0;
+}
+
+/* Specific overrides for corner UI elements */
+.fixed svg,
+.fixed img {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+/* Navigation arrows - ensure consistent sizing */
+.memory-nav-arrow svg {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+/* Lottie animation - slightly larger for main action button */
+dotlottie-wc {
+    width: 24px !important;
+    height: 24px !important;
+}
+
+/* Exception for font picker icons - keep them smaller */
+.font-picker-btn svg,
+.font-picker-btn img {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+/* Ultra-Transparent Glassy Button Base */
 .glassy-button {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    color: rgba(255, 255, 255, 0.9);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.04) 0%,
+        rgba(255, 255, 255, 0.01) 100%
+    );
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.95);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
@@ -40,13 +186,18 @@ body {
 }
 
 .glassy-button:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.25);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.03) 100%
+    );
+    border-color: rgba(255, 255, 255, 0.18);
     transform: translateY(-2px);
     box-shadow: 
-        0 10px 20px rgba(0, 0, 0, 0.1),
-        0 6px 6px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 16px 40px rgba(0, 0, 0, 0.20),
+        0 8px 16px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.10);
 }
 
 .glassy-button:hover::before {
@@ -62,13 +213,13 @@ body {
 
 /* Dark mode adjustments for buttons */
 body.dark .glassy-button {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
 }
 
 body.dark .glassy-button:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 /* Glassy Popup (Guide) */
@@ -77,19 +228,24 @@ body.dark .glassy-button:hover {
     top: 100%;
     left: 0;
     min-width: 280px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 16px;
+    padding: clamp(16px, 4vw, 20px);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.04) 0%,
+        rgba(255, 255, 255, 0.01) 100%
+    );
+    backdrop-filter: blur(45px);
+    -webkit-backdrop-filter: blur(45px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 
-        0 20px 25px -5px rgba(0, 0, 0, 0.1),
-        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        0 24px 48px -12px rgba(0, 0, 0, 0.20),
+        0 8px 16px rgba(0, 0, 0, 0.10),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 #kitty-guide:hover .glassy-popup,
@@ -99,16 +255,18 @@ body.dark .glassy-button:hover {
     transform: translateY(0);
 }
 
-/* Memory Card Container */
+/* Memory Card Container - Unified Mobile-First */
 .content-wrapper {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
     z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
     width: 100%;
-    max-width: 420px;
-    padding: 20px;
+    max-width: min(92vw, 420px);
+    margin: 0 auto;
+    padding: clamp(16px, 4vw, 24px);
 }
 
 .memory-card-container {
@@ -116,19 +274,26 @@ body.dark .glassy-button:hover {
     width: 100%;
 }
 
-/* Memory Navigation Arrows */
+/* Ultra-Transparent Memory Navigation Arrows */
 .memory-nav-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    color: rgba(255, 255, 255, 0.7);
-    padding: 12px;
-    border-radius: 16px;
-    transition: all 0.3s ease;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.03) 100%
+    );
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.8);
+    padding: clamp(8px, 2.5vw, 12px);
+    border-radius: 18px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0;
     visibility: hidden;
     z-index: 10;
@@ -148,10 +313,17 @@ body.dark .glassy-button:hover {
 }
 
 .memory-nav-arrow:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.12) 0%,
+        rgba(255, 255, 255, 0.06) 100%
+    );
     border-color: rgba(255, 255, 255, 0.25);
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.95);
     transform: translateY(-50%) scale(1.05);
+    box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 /* Glassy Memory Card */
@@ -221,12 +393,13 @@ body.light .memory-title {
     color: rgba(0, 0, 0, 0.85);
 }
 
-/* Memory Image Container */
+/* Memory Image Container - Mobile Optimized */
 .memory-image-container {
     width: 100%;
-    height: 200px;
-    margin-bottom: 20px;
-    border-radius: 16px;
+    aspect-ratio: 16/9;
+    height: clamp(160px, 36vw, 240px);
+    margin-bottom: clamp(10px, 2.5vw, 20px);
+    border-radius: clamp(12px, 3vw, 16px);
     overflow: hidden;
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.03) 0%, rgba(0, 0, 0, 0.08) 100%);
     display: flex;
@@ -240,7 +413,22 @@ body.light .memory-title {
     transform: scale(1.02);
 }
 
+.memory-image-container:hover .memory-video {
+    transform: scale(1.02);
+}
+
 .memory-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+    transition: transform 0.3s ease;
+}
+
+/* Video support for legacy container */
+.memory-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -359,9 +547,7 @@ body.light .memory-timer {
         font-size: 20px;
     }
     
-    .memory-image-container {
-        height: 160px;
-    }
+    /* .memory-image-container height now handled by aspect-ratio */
     
     .memory-text {
         font-size: 14px;
@@ -403,20 +589,52 @@ body.light .memory-timer {
 .glassy-card-enhanced {
     background: linear-gradient(
         135deg,
-        rgba(255, 255, 255, 0.1) 0%,
-        rgba(255, 255, 255, 0.05) 100%
+        rgba(255, 255, 255, 0.06) 0%,
+        rgba(255, 255, 255, 0.03) 50%,
+        rgba(255, 255, 255, 0.01) 100%
     );
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 28px;
-    padding: 28px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: clamp(20px, 5vw, 28px);
+    padding: clamp(16px, 4vw, 28px);
     box-shadow: 
-        0 24px 48px -12px rgba(0, 0, 0, 0.18),
-        inset 0 2px 4px rgba(255, 255, 255, 0.1);
+        0 32px 64px -12px rgba(0, 0, 0, 0.25),
+        0 16px 32px -8px rgba(0, 0, 0, 0.15),
+        inset 0 2px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.06);
     position: relative;
-    overflow: visible;
+    overflow: hidden;
     animation: cardFloat 6s ease-in-out infinite;
+}
+
+/* Glass shimmer effect */
+.glassy-card-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.06),
+        transparent
+    );
+    animation: shimmer 8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes shimmer {
+    0%, 90%, 100% {
+        left: -100%;
+        opacity: 0;
+    }
+    10%, 80% {
+        left: 100%;
+        opacity: 1;
+    }
 }
 
 /* Glow effect at top */
@@ -456,7 +674,7 @@ body.light .memory-timer {
 }
 
 .memory-title-enhanced {
-    font-size: 28px;
+    font-size: clamp(20px, 5vw, 28px);
     color: rgba(255, 255, 255, 0.95);
     margin: 0;
     font-weight: 400;
@@ -499,13 +717,14 @@ body.light .memory-timer {
 /* Enhanced Image Frame */
 .memory-image-frame {
     position: relative;
-    margin-bottom: 16px;
+    margin-bottom: clamp(10px, 2.5vw, 16px);
 }
 
 .memory-image-container-enhanced {
     width: 100%;
-    height: 220px;
-    border-radius: 20px;
+    aspect-ratio: 16/9;
+    height: clamp(160px, 36vw, 240px);
+    border-radius: clamp(16px, 4vw, 20px);
     overflow: hidden;
     background: linear-gradient(
         135deg,
@@ -529,6 +748,51 @@ body.light .memory-timer {
     transition: transform 0.3s ease;
 }
 
+/* Video support with same dimensions */
+.memory-video-enhanced {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    animation: fadeIn 0.6s ease forwards;
+    transition: transform 0.3s ease;
+}
+
+/* Ensure videos play inline on mobile and have controls */
+.memory-video-enhanced[playsinline] {
+    -webkit-playsinline: true;
+}
+
+@media (max-width: 640px) {
+    .memory-video-enhanced {
+        /* Disable autoplay on mobile for better UX */
+        -webkit-playsinline: true;
+    }
+}
+
+/* Optional portrait variant for portrait-oriented media */
+.memory-image-container-enhanced.portrait {
+    aspect-ratio: 4/5;
+    height: clamp(200px, 45vw, 320px);
+}
+
+.memory-image-container-enhanced.portrait .memory-image-enhanced,
+.memory-image-container-enhanced.portrait .memory-video-enhanced {
+    /* Inherits same object-fit: cover and positioning */
+}
+
+/* Portrait variant for legacy container */
+.memory-image-container.portrait {
+    aspect-ratio: 4/5;
+    height: clamp(200px, 45vw, 320px);
+}
+
+.memory-image-container.portrait .memory-image,
+.memory-image-container.portrait .memory-video {
+    /* Inherits same object-fit: cover and positioning */
+}
+
 /* Corner accents - REMOVED */
 .image-corner-accent {
     display: none;
@@ -549,11 +813,11 @@ body.light .memory-timer {
 }
 
 .memory-text-container-enhanced {
-    padding: 0 30px;
+    padding: 0 clamp(16px, 5vw, 30px);
 }
 
 .memory-text-enhanced {
-    font-size: 16px;
+    font-size: clamp(14px, 3.5vw, 16px);
     line-height: 1.7;
     color: rgba(255, 255, 255, 0.9);
     text-align: center;
@@ -595,15 +859,17 @@ body.light .memory-timer {
 }
 
 .memory-timer-enhanced {
-    font-size: 12px;
+    font-size: clamp(11px, 2.5vw, 12px);
     color: rgba(255, 255, 255, 0.65);
     margin: 0;
     font-weight: 300;
     letter-spacing: 0.3px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
     max-width: 100%;
+    text-align: center;
 }
 
 /* Light mode adjustments */
@@ -627,26 +893,26 @@ body.light .image-corner-accent {
     display: none;
 }
 
-/* Responsive adjustments */
+/* Mobile Responsive Adjustments - Enhanced with clamp() functions */
 @media (max-width: 640px) {
-    .glassy-card-enhanced {
-        padding: 24px;
-    }
-    
-    .memory-title-enhanced {
-        font-size: 24px;
-    }
-    
-    .memory-image-container-enhanced {
-        height: 180px;
-    }
-    
-    .memory-text-enhanced {
-        font-size: 15px;
-    }
-    
     .quote-mark {
         display: none;
+    }
+    
+    /* Ensure video mobile UX consistency across both containers */
+    .memory-video,
+    .memory-video-enhanced {
+        -webkit-playsinline: true;
+    }
+    
+    /* Maintain mobile-optimized spacing */
+    .memory-card-header-enhanced {
+        margin-bottom: clamp(12px, 3vw, 16px);
+        padding-bottom: clamp(12px, 3vw, 16px);
+    }
+    
+    .memory-text-wrapper {
+        margin-bottom: clamp(8px, 2vw, 12px);
     }
 }
 
@@ -1322,22 +1588,7 @@ body.light .bottle-create-btn:hover {
     z-index: 4;
 }
 
-.content-wrapper {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 0.5rem;
-    background-color: transparent;
-}
-
-@media (min-width: 640px) {
-    .content-wrapper {
-        padding: 1rem;
-    }
-}
+/* Content wrapper unified above - no duplicate needed */
 
 /* Responsive overrides for spacing utilities */
 @media (min-width: 640px) {
@@ -1362,12 +1613,13 @@ body.light .bottle-create-btn:hover {
 }
 
 #timer {
-    white-space: nowrap;
     text-align: center;
     max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 12px;
+    font-size: clamp(11px, 2.5vw, 12px);
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 /* Font Picker Button Styles */
@@ -2025,24 +2277,35 @@ body.light .bottle-create-btn:hover {
 
 /* Weather status positioning - plain text below Jane Doe card */
 #weather-status {
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
+    position: fixed !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
     bottom: 4rem;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
-    text-align: center;
+    font-size: clamp(12px, 3vw, 14px);
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center !important;
     z-index: 40;
     pointer-events: none;
     width: auto;
     max-width: 90vw;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+    padding: 0 8px;
+    right: auto !important;
 }
 
 body.light #weather-status {
-    color: rgba(0, 0, 0, 0.7);
+    color: rgba(0, 0, 0, 0.8);
+}
+
+/* Mobile weather status positioning - much higher up with better readability */
+@media (max-width: 640px) {
+    #weather-status {
+        bottom: 6rem !important;
+        font-size: clamp(13px, 3.5vw, 15px) !important;
+    }
 }
 
 @media (min-width: 640px) {
@@ -2721,18 +2984,17 @@ body.weather-clear.light #weather-status {
     }
 }
 
-/* Fix for iOS Safari bounce scrolling */
+/* Modern Mobile Scroll Behavior - No Fixed HTML Hack */
 html {
-    position: fixed;
     height: 100%;
     width: 100%;
-    overflow: hidden;
+    overscroll-behavior: none;
 }
 
 body {
     height: 100%;
     width: 100%;
-    overflow: auto;
+    overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -3282,9 +3544,9 @@ body {
 
 /* v2 Weather Status Mobile Positioning */
 [data-ui="v2"] #weather-status {
-    bottom: 7rem !important;
-    font-size: 0.875rem !important;
-    padding: 0 1rem !important;
+    bottom: 8rem !important;
+    font-size: clamp(13px, 3.5vw, 15px) !important;
+    padding: 8px 12px !important;
     background-color: rgba(255, 255, 255, 0.15) !important;
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
@@ -3293,9 +3555,10 @@ body {
     left: 50% !important;
     transform: translateX(-50%) !important;
     max-width: 85vw !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.3 !important;
 }
 
 [data-ui="v2"].dark #weather-status {

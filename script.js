@@ -1700,53 +1700,45 @@ async function getWeatherData() {
     currentWeatherData = weatherData;
     const weatherMain = currentWeatherData.main;
 
-    let statusText = "";
+    const isMobile = window.innerWidth <= 640;
+    const statusText = getWeatherText(weatherMain, weatherData.name, weatherData.temp, isMobile);
+    
     let weatherClass = "";
     switch (weatherMain) {
       case "Thunderstorm":
-        statusText = `A storm is passing by in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "thunderstorm";
         break;
       case "Drizzle":
-        statusText = `A gentle drizzle is falling in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "drizzle";
         break;
       case "Rain":
-        statusText = `It's raining in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "rain";
         break;
       case "Snow":
-        statusText = `It's snowing in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "snow";
         break;
       case "Mist":
       case "Fog":
-        statusText = `Misty conditions in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "foggy";
         break;
       case "Smoke":
       case "Haze":
       case "Dust":
-        statusText = `Hazy conditions in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "hazy";
         break;
       case "Sand":
       case "Ash":
-        statusText = `Dusty conditions in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "dusty";
         break;
       case "Squall":
       case "Tornado":
-        statusText = `Severe weather in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "severe";
         break;
       case "Clouds":
-        statusText = `It's cloudy in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "cloudy";
         break;
       case "Clear":
       default:
-        statusText = `The sky is clear in ${weatherData.name}. ${weatherData.temp}°C`;
         weatherClass = "clear";
         break;
     }
@@ -1798,53 +1790,45 @@ function setWeatherUIFromMain(main, cityName = 'Test City', tempC = null) {
 
   // Render status and classes (mirrors getWeatherData switch)
   const weatherMain = weatherData.main;
-  let statusText = '';
+  const isMobile = window.innerWidth <= 640;
+  const statusText = getWeatherText(weatherMain, weatherData.name, weatherData.temp, isMobile);
+  
   let weatherClass = '';
   switch (weatherMain) {
     case 'Thunderstorm':
-      statusText = `A storm is passing by in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'thunderstorm';
       break;
     case 'Drizzle':
-      statusText = `A gentle drizzle is falling in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'drizzle';
       break;
     case 'Rain':
-      statusText = `It's raining in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'rain';
       break;
     case 'Snow':
-      statusText = `It's snowing in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'snow';
       break;
     case 'Mist':
     case 'Fog':
-      statusText = `Misty conditions in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'foggy';
       break;
     case 'Smoke':
     case 'Haze':
     case 'Dust':
-      statusText = `Hazy conditions in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'hazy';
       break;
     case 'Sand':
     case 'Ash':
-      statusText = `Dusty conditions in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'dusty';
       break;
     case 'Squall':
     case 'Tornado':
-      statusText = `Severe weather in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'severe';
       break;
     case 'Clouds':
-      statusText = `It's cloudy in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'cloudy';
       break;
     case 'Clear':
     default:
-      statusText = `The sky is clear in ${weatherData.name}. ${weatherData.temp}°C`;
       weatherClass = 'clear';
       break;
   }
@@ -2108,8 +2092,98 @@ function updateTimer() {
   const hours = Math.floor((diff % 86400000) / 3600000);
   const minutes = Math.floor((diff % 3600000) / 60000);
   const seconds = Math.floor((diff % 60000) / 1000);
-  timerElement.innerText = `Missing you for: ${days} days, ${hours} hours, ${minutes} minutes, and ${seconds} seconds.`;
+  // Create mobile-friendly timer text
+  const isMobile = window.innerWidth <= 640;
+  if (isMobile) {
+    timerElement.innerText = `Missing you for: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  } else {
+    timerElement.innerText = `Missing you for: ${days} days, ${hours} hours, ${minutes} minutes, and ${seconds} seconds.`;
+  }
 }
+
+// Helper function to create mobile-friendly weather text
+function getWeatherText(weatherMain, cityName, temp, isMobile = false) {
+  if (isMobile) {
+    // Shorter mobile versions
+    switch (weatherMain) {
+      case "Thunderstorm":
+        return `Storm in ${cityName}, ${temp}°C`;
+      case "Drizzle":
+        return `Drizzle in ${cityName}, ${temp}°C`;
+      case "Rain":
+        return `Rain in ${cityName}, ${temp}°C`;
+      case "Snow":
+        return `Snow in ${cityName}, ${temp}°C`;
+      case "Mist":
+      case "Fog":
+        return `Foggy in ${cityName}, ${temp}°C`;
+      case "Smoke":
+      case "Haze":
+      case "Dust":
+        return `Hazy in ${cityName}, ${temp}°C`;
+      case "Sand":
+      case "Ash":
+        return `Dusty in ${cityName}, ${temp}°C`;
+      case "Squall":
+      case "Tornado":
+        return `Severe weather in ${cityName}, ${temp}°C`;
+      case "Clouds":
+        return `Cloudy in ${cityName}, ${temp}°C`;
+      case "Clear":
+      default:
+        return `Clear in ${cityName}, ${temp}°C`;
+    }
+  } else {
+    // Full desktop versions
+    switch (weatherMain) {
+      case "Thunderstorm":
+        return `A storm is passing by in ${cityName}. ${temp}°C`;
+      case "Drizzle":
+        return `A gentle drizzle is falling in ${cityName}. ${temp}°C`;
+      case "Rain":
+        return `It's raining in ${cityName}. ${temp}°C`;
+      case "Snow":
+        return `It's snowing in ${cityName}. ${temp}°C`;
+      case "Mist":
+      case "Fog":
+        return `Misty conditions in ${cityName}. ${temp}°C`;
+      case "Smoke":
+      case "Haze":
+      case "Dust":
+        return `Hazy conditions in ${cityName}. ${temp}°C`;
+      case "Sand":
+      case "Ash":
+        return `Dusty conditions in ${cityName}. ${temp}°C`;
+      case "Squall":
+      case "Tornado":
+        return `Severe weather in ${cityName}. ${temp}°C`;
+      case "Clouds":
+        return `It's cloudy in ${cityName}. ${temp}°C`;
+      case "Clear":
+      default:
+        return `The sky is clear in ${cityName}. ${temp}°C`;
+    }
+  }
+}
+
+// Update weather text when screen size changes
+function updateWeatherText() {
+  if (currentWeatherData && weatherStatusElement) {
+    const isMobile = window.innerWidth <= 640;
+    const statusText = getWeatherText(currentWeatherData.main, currentWeatherData.name, currentWeatherData.temp, isMobile);
+    weatherStatusElement.textContent = statusText;
+  }
+}
+
+// Update timer format and weather text on resize
+let resizeTimeout;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    updateTimer();
+    updateWeatherText();
+  }, 100);
+});
 
 // --- Mobile Sidebar Toggle Logic ---
 const toggleLetterSidebar = document.getElementById("toggle-letter-sidebar");
